@@ -8,9 +8,9 @@ dataSources:
     name: StepStakeDynamicNFT
     network: sepolia
     source:
-      address: "0x5e80F282a08e5C84BcD94f94fE87259e412193ca"
+      address: "0xf809812695F341479218DAa3a8B2beEa2eC88339"
       abi: StepStakeDynamicNFT
-      startBlock: 7218916
+      startBlock: 7226253
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
