@@ -10,7 +10,7 @@ dataSources:
     source:
       address: "0x5e80F282a08e5C84BcD94f94fE87259e412193ca"
       abi: StepStakeDynamicNFT
-      startBlock: 7218995
+      startBlock: 7218916
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
