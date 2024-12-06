@@ -5,6 +5,9 @@
   "workspaces": {
     "packages": [
       "packages/*"
+    ],
+    "subgraph1": [
+      "subgraph1/*"
     ]
   },
   "scripts": {
