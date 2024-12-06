@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.12.2",
+    "@apollo/experimental-nextjs-app-support": "^0.11.7",
     "graphql": "^16.9.0"
   }
 }
