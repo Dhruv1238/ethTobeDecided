@@ -1,11 +1,10 @@
-"use client"
+"use client";
+
 import React, { useState } from "react";
-import { injected } from "wagmi/connectors";
-import { useConnect, useAccount, useWriteContract, useChainId, useSwitchChain } from "wagmi";
 import { parseEther } from "viem";
 import { sepolia } from "viem/chains";
-import { type Abi } from "viem";
-import { StakingABI } from "~~/abis/StakingABI";
+import { useAccount, useChainId, useConnect, useSwitchChain, useWriteContract } from "wagmi";
+import { injected } from "wagmi/connectors";
 
 interface StakeBalanceProps {
   initialBalance: number;
@@ -14,8 +13,7 @@ interface StakeBalanceProps {
   chainId: number;
 }
 
-const StakeBalance: React.FC<StakeBalanceProps> = ({ initialBalance, contractAddress, contractABI, chainId }) => {
-  const [balance, setBalance] = useState(initialBalance);
+const StakeBalance: React.FC<StakeBalanceProps> = ({ initialBalance, contractAddress, contractABI }) => {
   const [stakeAmount, setStakeAmount] = useState<string>("");
 
   const { isConnected } = useAccount();
@@ -55,7 +53,7 @@ const StakeBalance: React.FC<StakeBalanceProps> = ({ initialBalance, contractAdd
       writeContract({
         address: contractAddress,
         abi: contractABI,
-        functionName: 'stake',
+        functionName: "stake",
         args: [],
         value: parseEther(stakeAmount),
       });
@@ -83,8 +81,8 @@ const StakeBalance: React.FC<StakeBalanceProps> = ({ initialBalance, contractAdd
   return (
     <div className="flex flex-col items-center bg-base-100 p-5 rounded-lg shadow-md mb-8">
       <h2 className="text-2xl font-bold mb-4 text-base-content">Your Staking Balance</h2>
-      <p className="text-lg mb-4 text-base-content">Current Balance: {balance} ETH</p>
-      
+      <p className="text-lg mb-4 text-base-content">Current Balance: {initialBalance} ETH</p>
+
       <div className="form-control w-full max-w-xs mb-4">
         <label className="label">
           <span className="label-text">Amount to Stake (ETH)</span>
@@ -101,12 +99,10 @@ const StakeBalance: React.FC<StakeBalanceProps> = ({ initialBalance, contractAdd
 
       <button
         onClick={handleStake}
-        className={`btn btn-primary w-full max-w-xs ${isPending ? 'loading' : ''}`}
+        className={`btn btn-primary w-full max-w-xs ${isPending ? "loading" : ""}`}
         disabled={!stakeAmount || parseFloat(stakeAmount) <= 0 || isPending}
       >
-        {!isConnected ? "Connect Wallet" : 
-         isPending ? "Staking..." : 
-         "Stake ETH"}
+        {!isConnected ? "Connect Wallet" : isPending ? "Staking..." : "Stake ETH"}
       </button>
 
       {/* Status Messages */}
