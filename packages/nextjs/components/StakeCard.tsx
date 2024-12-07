@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { parseEther } from "viem";
 import { useAccount, useBalance, useChainId, useConnect, useSwitchChain, useWriteContract } from "wagmi";
 import { injected } from "wagmi/connectors";
+import { baseSepolia } from "viem/chains";
 
 interface StakeCardProps {
   contractAddress: `0x${string}`;
