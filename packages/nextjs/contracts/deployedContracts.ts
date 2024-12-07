@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   84532: {
     StepStakeDynamicNFT: {
-      address: "0xf809812695F341479218DAa3a8B2beEa2eC88339",
+      address: "0x52dE6508FECCA4d712b75b0bD018a621EaF2d734",
       abi: [
         {
           inputs: [],
@@ -206,6 +206,25 @@ const deployedContracts = {
             },
           ],
           name: "BatchMetadataUpdate",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "DailyChallengeNFTMinted",
           type: "event",
         },
         {
@@ -463,6 +482,39 @@ const deployedContracts = {
             },
           ],
           stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "challengeType",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "quirkyMessage",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "imageUrl",
+              type: "string",
+            },
+          ],
+          name: "mintDailyChallengeNFT",
+          outputs: [],
+          stateMutability: "nonpayable",
           type: "function",
         },
         {

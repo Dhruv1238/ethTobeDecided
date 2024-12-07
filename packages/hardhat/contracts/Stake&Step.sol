@@ -33,6 +33,7 @@ contract StepStakeDynamicNFT is ERC721URIStorage, Ownable {
     event StepsCounted(address indexed user, uint256 stepCount);
     event NFTMinted(address indexed user, uint256 tokenId);
     event StakeForfeit(address indexed user, uint256 amount);
+    event DailyChallengeNFTMinted(address indexed user, uint256 tokenId);
 
     constructor() ERC721("DailyStepChallenge", "STEPNFT") Ownable(msg.sender) {
         _tokenIdCounter = 1;
@@ -40,11 +41,9 @@ contract StepStakeDynamicNFT is ERC721URIStorage, Ownable {
 
     // Stake function - allows staking with native token
     function stake() external payable {
-        // Ensure user hasn't already staked
         require(userStakes[msg.sender].amount == 0, "Already staked");
         require(msg.value > 0, "Stake amount must be greater than 0");
 
-        // Record stake information
         userStakes[msg.sender] = StakeInfo({
             amount: msg.value,
             stakeTimestamp: block.timestamp,
@@ -58,64 +57,68 @@ contract StepStakeDynamicNFT is ERC721URIStorage, Ownable {
     // Update daily steps
     function updateDailySteps(address wallet, uint256 stepCount) external {
         StakeInfo storage stakeInfo = userStakes[wallet];
-
-        // Ensure user has an active stake
         require(stakeInfo.amount > 0, "No active stake");
-
-        // Ensure stake is from today
         require(block.timestamp - stakeInfo.stakeTimestamp < STAKE_PERIOD, "Stake period expired");
 
-        // Update step count
         stakeInfo.stepCount = stepCount;
-
         emit StepsCounted(wallet, stepCount);
     }
 
     // Mint NFT and claim stake if goal is met
-        function claimStakeAndMintNFT(address wallet, string memory imageUrl) external {
+    function claimStakeAndMintNFT(address wallet, string memory imageUrl) external {
         StakeInfo storage stakeInfo = userStakes[wallet];
-    
-        // Ensure stake exists
         require(stakeInfo.amount > 0, "No active stake");
-    
-        // Ensure stake period has passed
         require(block.timestamp - stakeInfo.stakeTimestamp <= STAKE_PERIOD, "Stake period expired");
-    
-        // Ensure not already claimed
         require(!stakeInfo.claimed, "Stake already claimed");
-    
-        // Check if step goal is met
+
         if (stakeInfo.stepCount >= DAILY_STEP_GOAL) {
-            // Mint unique NFT with provided image URL
             uint256 newTokenId = _tokenIdCounter;
             _mintDynamicNFT(wallet, newTokenId, stakeInfo.stepCount, imageUrl);
-    
-            // Transfer stake back to user
+
             (bool success, ) = payable(wallet).call{ value: stakeInfo.amount }("");
             require(success, "Transfer failed");
-    
-            // Mark as claimed
+
             stakeInfo.claimed = true;
-    
             emit NFTMinted(wallet, newTokenId);
         } else {
-            // Forfeit stake if goal not met
             (bool success, ) = payable(owner()).call{ value: stakeInfo.amount }("");
             require(success, "Forfeit transfer failed");
-    
+
             emit StakeForfeit(wallet, stakeInfo.amount);
         }
-    
-        // Reset stake
+
         delete userStakes[wallet];
+    }
+
+    // Mint Daily Challenge NFT
+    function mintDailyChallengeNFT(
+        address user,
+        string memory challengeType,
+        string memory description,
+        string memory quirkyMessage,
+        string memory imageUrl
+    ) external onlyOwner {
+        uint256 newTokenId = _tokenIdCounter;
+
+        string memory metadata = generateDailyChallengeMetadata(
+            newTokenId,
+            challengeType,
+            description,
+            quirkyMessage,
+            imageUrl
+        );
+
+        _safeMint(user, newTokenId);
+        _setTokenURI(newTokenId, metadata);
+
+        _tokenIdCounter++;
+        emit DailyChallengeNFTMinted(user, newTokenId);
     }
 
     // Internal function to mint NFT with dynamic metadata
     function _mintDynamicNFT(address user, uint256 tokenId, uint256 stepCount, string memory imageUrl) internal {
-        // Generate metadata
         string memory metadata = generateMetadata(tokenId, stepCount, imageUrl);
 
-        // Mint NFT with metadata
         _safeMint(user, tokenId);
         _setTokenURI(tokenId, metadata);
 
@@ -140,8 +143,39 @@ contract StepStakeDynamicNFT is ERC721URIStorage, Ownable {
                 '"},',
                 '{"trait_type": "Goal Achieved", "value": "',
                 (stepCount >= 5000 ? "Yes" : "No"),
+                '"}],"',
+                '"image": "',
+                imageUrl,
                 '"}'
-                "],",
+            )
+        );
+
+        return string(abi.encodePacked("data:application/json;base64,", Base64.encode(bytes(metadata))));
+    }
+
+    // Generate metadata for Daily Challenge NFT
+    function generateDailyChallengeMetadata(
+        uint256 tokenId,
+        string memory challengeType,
+        string memory description,
+        string memory quirkyMessage,
+        string memory imageUrl
+    ) internal pure returns (string memory) {
+        string memory metadata = string(
+            abi.encodePacked(
+                '{"name": "Daily Challenge NFT #',
+                tokenId.toString(),
+                '",',
+                '"description": "',
+                description,
+                '",',
+                '"attributes": [',
+                '{"trait_type": "Challenge Type", "value": "',
+                challengeType,
+                '"},',
+                '{"trait_type": "Quirky Message", "value": "',
+                quirkyMessage,
+                '"}],"',
                 '"image": "',
                 imageUrl,
                 '"}'
