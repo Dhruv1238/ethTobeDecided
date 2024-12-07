@@ -1,30 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import { useTheme } from "next-themes";
 import { Toaster } from "react-hot-toast";
 import { WagmiProvider } from "wagmi";
+// import { BottomTabs } from "~~/components/BottomTabs";
+import ChatSearchBar from "~~/components/ChatSearchBar";
 // import { Footer } from "~~/components/Footer";
 import { NewHeader } from "~~/components/NewHeader";
-import { BottomTabs } from "~~/components/BottomTabs";
-import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import ChatSearchBar from "~~/components/ChatSearchBar";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
 
   return (
     <>
-      <div className={`flex flex-col min-h-screen `}>
+      <div>
         <NewHeader />
-        <main className="relative flex flex-col flex-1">{children}</main>
+        <main>{children}</main>
         {/* <Footer /> */}
         <ChatSearchBar />
         {/* <BottomTabs /> */}
@@ -43,10 +42,10 @@ export const queryClient = new QueryClient({
 });
 
 const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
-  const apolloClient = new ApolloClient({
-    uri: subgraphUri,
-    cache: new InMemoryCache(),
-  });
+const apolloClient = new ApolloClient({
+  uri: subgraphUri,
+  cache: new InMemoryCache(),
+});
 
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
   const { resolvedTheme } = useTheme();
@@ -66,7 +65,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
           theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
         >
           <ApolloProvider client={apolloClient}>
-          <ScaffoldEthApp>{children}</ScaffoldEthApp>
+            <ScaffoldEthApp>{children}</ScaffoldEthApp>
           </ApolloProvider>
         </RainbowKitProvider>
       </QueryClientProvider>

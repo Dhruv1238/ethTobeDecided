@@ -1,11 +1,16 @@
 // components/BottomTabs.tsx
-
 "use client";
 
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaHome, FaWallet, FaGamepad, FaTrophy } from "react-icons/fa";
+import { FaGamepad, FaHome, FaTrophy, FaWallet } from "react-icons/fa";
+
+// components/BottomTabs.tsx
+
+// components/BottomTabs.tsx
+
+// components/BottomTabs.tsx
 
 export const BottomTabs = () => {
   const router = useRouter();

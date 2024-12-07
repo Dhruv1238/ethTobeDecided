@@ -13,8 +13,6 @@ export const NewHeader = () => {
 
   return (
     <div className="header-container p-3  ">
-      {/* Friends Icon */}
-      <h1 className="text-white text-xl">StakeFIT</h1>
       {/* Connect Wallet Button */}
       {!isConnected ? (
         <button className="connect-button" onClick={() => connect({ connector: injected() })}>
