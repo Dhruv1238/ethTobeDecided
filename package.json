@@ -61,6 +61,7 @@
     "@apollo/experimental-nextjs-app-support": "^0.11.7",
     "@graphprotocol/graph-cli": "^0.91.1",
     "ethereum-blockies": "^0.1.1",
+    "framer-motion": "^11.13.1",
     "graphql": "^16.9.0"
   }
 }
