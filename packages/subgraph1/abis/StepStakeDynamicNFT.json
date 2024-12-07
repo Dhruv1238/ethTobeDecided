@@ -310,6 +310,7 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "wallet", "type": "address" },
       { "internalType": "string", "name": "imageUrl", "type": "string" }
     ],
     "name": "claimStakeAndMintNFT",
@@ -453,6 +454,7 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "wallet", "type": "address" },
       { "internalType": "uint256", "name": "stepCount", "type": "uint256" }
     ],
     "name": "updateDailySteps",

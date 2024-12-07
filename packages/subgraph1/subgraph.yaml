@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: StepStakeDynamicNFT
-    network: sepolia
+    network: base-sepolia
     source:
-      address: "0xf809812695F341479218DAa3a8B2beEa2eC88339"
+      address: "0x52dE6508FECCA4d712b75b0bD018a621EaF2d734"
       abi: StepStakeDynamicNFT
-      startBlock: 7226253
+      startBlock: 18902079
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

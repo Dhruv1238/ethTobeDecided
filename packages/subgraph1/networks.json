@@ -1,8 +1,8 @@
 {
-  "sepolia": {
+  "base-sepolia": {
     "StepStakeDynamicNFT": {
-      "address": "0xf809812695F341479218DAa3a8B2beEa2eC88339",
-      "startBlock": 7226253
+      "address": "0x52dE6508FECCA4d712b75b0bD018a621EaF2d734",
+      "startBlock": 18902079
     }
   }
 }
