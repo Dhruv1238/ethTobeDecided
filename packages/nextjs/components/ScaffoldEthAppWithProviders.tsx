@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,15 +19,15 @@ import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
+  const pathname = usePathname();
+  const isLoginPage = pathname === "/login";
 
   return (
     <>
       <div>
-        <NewHeader />
+        {!isLoginPage && <NewHeader />}
         <main>{children}</main>
-        {/* <Footer /> */}
-        <ChatSearchBar />
-        {/* <BottomTabs /> */}
+        {!isLoginPage && <ChatSearchBar />}
       </div>
       <Toaster />
     </>

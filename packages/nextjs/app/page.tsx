@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
@@ -12,18 +15,89 @@ import StepComponent from "~~/components/StepComponent";
 import { Address } from "~~/components/scaffold-eth";
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  const y = useMotionValue(0);
+  const [isDragging, setIsDragging] = useState(false);
+
   const { address: connectedAddress } = useAccount();
   const contractAddress = "0x52dE6508FECCA4d712b75b0bD018a621EaF2d734" as `0x${string}`;
   const contractABI = StakingABI;
 
+  const bgOpacity = useTransform(y, [0, 150], [0, 0.5]);
+
+  const handleDrag = (_, info) => {
+    if (info.offset.y > 150) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragEnd = (_, info) => {
+    if (info.offset.y > 150) {
+      y.set(window.innerHeight);
+      setTimeout(() => {
+        router.push("/leaderboard");
+      }, 300);
+    } else {
+      y.set(0);
+    }
+  };
+
   return (
     <>
-      {/* Floating Stake Button - Always visible */}
-      <div className="fixed right-0 bottom-8 z-50 flex items-center">
-        <StakeButton contractAddress={contractAddress} contractABI={contractABI} />
-      </div>
+      <motion.div
+        style={{
+          opacity: bgOpacity,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "black",
+          pointerEvents: "none",
+          zIndex: 40,
+        }}
+      />
 
-      <div className="flex items-center flex-col flex-grow pt-10">
+      <motion.div
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={0.9}
+        onDrag={handleDrag}
+        onDragEnd={handleDragEnd}
+        style={{ y }}
+        className="flex items-center flex-col flex-grow pt-10"
+      >
+        <motion.div
+          style={{
+            position: "fixed",
+            top: 20,
+            left: "50%",
+            transform: "translateX(-50%)",
+            opacity: useTransform(y, [0, 50], [0, 1]),
+            zIndex: 50,
+          }}
+          className="flex flex-col items-center gap-2"
+        >
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="text-neon-green"
+          >
+            ↓
+          </motion.div>
+          <span className="text-neon-green font-bold bg-base-300 px-4 py-2 rounded-full shadow-lg">
+            Pull down for Leaderboard
+          </span>
+        </motion.div>
+
+        <div className="mb-8 text-center text-sm text-gray-400 animate-pulse">
+          Swipe down to check the leaderboard rankings
+        </div>
+
         <div className="px-5">
           <h1 className="text-center">
             <span className="block text-2xl mb-2">
@@ -41,10 +115,9 @@ const Home: NextPage = () => {
           </div>
 
           <div className="flex justify-center my-4">
-            <StepComponent  totalSteps={6000} />
+            <StepComponent totalSteps={6000} />
           </div>
 
-          {/* Stake Card with CTA Arrow */}
           <div className="relative">
             <div className="absolute -top-12 right-10 animate-bounce">
               <div className="flex items-center text-neon-green">
@@ -55,23 +128,7 @@ const Home: NextPage = () => {
               </div>
             </div>
             <div className="relative">
-              <div className="absolute -left-4 top-1/2 animate-pulse">
-                {/* <div className="flex items-center text-neon-green rotate-[-30deg]">
-                  <svg
-                    className="w-12 h-12"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div> */}
-              </div>
+              <div className="absolute -left-4 top-1/2 animate-pulse"></div>
               <StakeCard contractAddress={contractAddress} contractABI={contractABI} />
             </div>
           </div>
@@ -124,7 +181,7 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };
