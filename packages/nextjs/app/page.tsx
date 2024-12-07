@@ -9,6 +9,7 @@ import StakeButton from "~~/components/StakeButton";
 import StatsComponent from "~~/components/StatsComponent";
 import StepComponent from "~~/components/StepComponent";
 import { Address } from "~~/components/scaffold-eth";
+import StakeCard from "~~/components/StakeCard";
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -41,6 +42,49 @@ const Home: NextPage = () => {
 
           <div className="flex justify-center my-4">
             <StatsComponent steps={2259} minutes={23} calories={68} stepsGoal={6000} />
+          </div>
+
+
+          {/* Stake Card with CTA Arrow */}
+          <div className="relative">
+            <div className="absolute -top-12 right-10 animate-bounce">
+              <div className="flex items-center text-neon-green">
+                <span className="mr-2 font-bold">Stake Now!</span>
+                <svg
+                  className="w-6 h-6 transform rotate-90"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute -left-4 top-1/2 animate-pulse">
+                {/* <div className="flex items-center text-neon-green rotate-[-30deg]">
+                  <svg
+                    className="w-12 h-12"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div> */}
+              </div>
+              <StakeCard contractAddress={contractAddress} contractABI={contractABI} />
+            </div>
           </div>
 
           <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">
