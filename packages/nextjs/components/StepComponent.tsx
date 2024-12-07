@@ -1,11 +1,23 @@
-import { FC } from "react";
+"use client";
+
+import { FC, useEffect } from "react";
+import { useFitness } from "~~/context/FitnessContext";
 
 interface StepComponentProps {
-  currentSteps: number;
-  totalSteps: number;
+  totalSteps?: number;
 }
 
-const StepComponent: FC<StepComponentProps> = ({ currentSteps, totalSteps }) => {
+const StepComponent: FC<StepComponentProps> = ({ totalSteps = 6000 }) => {
+  const { fitnessData, fetchFitnessData } = useFitness();
+
+  useEffect(() => {
+    fetchFitnessData();
+    const interval = setInterval(fetchFitnessData, 2 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [fetchFitnessData]);
+
+  // Extract current steps from fitness data
+  const currentSteps = fitnessData?.bucket?.[0]?.dataset?.[0]?.point?.[0]?.value?.[0]?.intVal || 0;
   const percentage = Math.round((currentSteps / totalSteps) * 100);
 
   return (

@@ -19,9 +19,9 @@ const Home: NextPage = () => {
   return (
     <>
       {/* Floating Stake Button - Always visible */}
-      <div className="fixed right-0 bottom-8 z-50 flex items-center">
+      {/* <div className="fixed right-0 bottom-8 z-50 flex items-center">
         <StakeButton contractAddress={contractAddress} contractABI={contractABI} />
-      </div>
+      </div> */}
 
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
@@ -37,11 +37,11 @@ const Home: NextPage = () => {
           </h1>
 
           <div className="flex justify-center my-4">
-            <StatsComponent steps={2259} minutes={23} calories={68} stepsGoal={6000} />
+            <StatsComponent stepsGoal={8000} />
           </div>
 
           <div className="flex justify-center my-4">
-            <StepComponent currentSteps={2000} totalSteps={6000} />
+            <StepComponent totalSteps={8000} />
           </div>
 
 
