@@ -7326,7 +7326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.7":
+"axios@npm:^1.6.7, axios@npm:^1.7.9":
   version: 1.7.9
   resolution: "axios@npm:1.7.9"
   dependencies:
@@ -17542,6 +17542,7 @@ __metadata:
     "@ethereum-attestation-service/eas-sdk": ^2.7.0
     "@graphprotocol/graph-cli": ^0.91.1
     "@types/ethereum-blockies": ^0
+    axios: ^1.7.9
     ethereum-blockies: ^0.1.1
     framer-motion: ^11.13.1
     graphql: ^16.9.0

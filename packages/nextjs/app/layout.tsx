@@ -87,10 +87,10 @@ const TokenHandler = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-const MomentumApp = ({ children }: { children: React.ReactNode }) => {
+const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
     <html suppressHydrationWarning>
-      <body className="bg-[#1a1a1a] text-white">
+      <body>
         <ThemeProvider enableSystem>
           <AuthProvider>
             <ScaffoldEthAppWithProviders>
@@ -109,4 +109,4 @@ const MomentumApp = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default MomentumApp;
+export default ScaffoldEthApp;
