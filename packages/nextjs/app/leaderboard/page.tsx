@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { LEADERBOARD } from "./queries";
+import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
 
 interface LeaderboardEntry {
@@ -11,13 +13,17 @@ interface LeaderboardEntry {
 }
 
 export default function Leaderboard() {
-  // Static sample data
+  const { data, loading, error } = useQuery(LEADERBOARD);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  console.log(data);
+
   const leaderboardData: LeaderboardEntry[] = [
-    { rank: 1, address: "0x1234...5678", score: 1500, eth: 2.50 },
+    { rank: 1, address: "0x1234...5678", score: 1500, eth: 2.5 },
     { rank: 2, address: "0x8765...4321", score: 1450, eth: 2.45 },
-    { rank: 3, address: "0x9876...1234", score: 1400, eth: 2.40 },
+    { rank: 3, address: "0x9876...1234", score: 1400, eth: 2.4 },
     { rank: 4, address: "0x5432...8765", score: 1350, eth: 2.35 },
-    { rank: 5, address: "0x2468...1357", score: 1300, eth: 2.30 },
+    { rank: 5, address: "0x2468...1357", score: 1300, eth: 2.3 },
   ];
 
   // Generate additional entries with predictable values
@@ -25,9 +31,9 @@ export default function Leaderboard() {
   for (let i = leaderboardData.length + 1; i <= 50; i++) {
     extendedData.push({
       rank: i,
-      address: `0x${i.toString().padStart(4, '0')}...${(1000 - i).toString().padStart(4, '0')}`,
-      score: Math.max(0, 1500 - (i * 20)),
-      eth: Number((2.5 - (i * 0.05)).toFixed(2))
+      address: `0x${i.toString().padStart(4, "0")}...${(1000 - i).toString().padStart(4, "0")}`,
+      score: Math.max(0, 1500 - i * 20),
+      eth: Number((2.5 - i * 0.05).toFixed(2)),
     });
   }
 
@@ -66,29 +72,35 @@ export default function Leaderboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 className={`p-4 rounded-lg ${
-                  entry.rank === 1 ? 'bg-yellow-500/20 border border-yellow-500/50' :
-                  entry.rank === 2 ? 'bg-gray-400/20 border border-gray-400/50' :
-                  entry.rank === 3 ? 'bg-orange-600/20 border border-orange-600/50' :
-                  'bg-base-200'
+                  entry.rank === 1
+                    ? "bg-yellow-500/20 border border-yellow-500/50"
+                    : entry.rank === 2
+                      ? "bg-gray-400/20 border border-gray-400/50"
+                      : entry.rank === 3
+                        ? "bg-orange-600/20 border border-orange-600/50"
+                        : "bg-base-200"
                 } hover:bg-base-300 transition-all duration-200 transform hover:scale-[1.02]`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      entry.rank === 1 ? 'bg-yellow-500' :
-                      entry.rank === 2 ? 'bg-gray-400' :
-                      entry.rank === 3 ? 'bg-orange-600' :
-                      'bg-base-300'
-                    }`}>
-                      <span className="font-bold text-base-100">
-                        {entry.rank}
-                      </span>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        entry.rank === 1
+                          ? "bg-yellow-500"
+                          : entry.rank === 2
+                            ? "bg-gray-400"
+                            : entry.rank === 3
+                              ? "bg-orange-600"
+                              : "bg-base-300"
+                      }`}
+                    >
+                      <span className="font-bold text-base-100">{entry.rank}</span>
                     </div>
                     <span className="text-white font-mono">{entry.address}</span>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col items-end">
-                      <span className="text-primary font-bold text-gray-400">{entry.score}</span>
+                      <span className=" font-bold text-gray-400">{entry.score}</span>
                     </div>
                     <div className="flex flex-col items-end min-w-[80px]">
                       <span className="text-green-500 font-bold">{entry.eth} ETH</span>
