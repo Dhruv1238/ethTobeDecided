@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { LEADERBOARD } from "./queries";
 import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
@@ -21,6 +22,7 @@ interface LeaderboardEntry {
 }
 
 export default function Leaderboard() {
+  const router = useRouter();
   const { data, loading, error } = useQuery(LEADERBOARD);
 
   if (loading) {
@@ -53,9 +55,18 @@ export default function Leaderboard() {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Hero Section */}
+      {/* Hero Section with Back Button */}
       <div className="bg-dark-surface py-8">
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="max-w-2xl mx-auto text-center relative">
+          {/* Back Button */}
+          <button
+            onClick={() => router.back()}
+            className="absolute left-6 top-1/4 -translate-y-1/2 
+                     text-neon-green text-5xl hover:text-green-400 transition-colors"
+          >
+            ←
+          </button>
+
           <h1 className="text-4xl font-bold mb-4 text-neon-green glow-text">Top Stakers</h1>
           <p className="text-gray-300">The highest stakers on our platform are showcased here</p>
         </div>
