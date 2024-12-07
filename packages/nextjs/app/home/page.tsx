@@ -6,6 +6,7 @@ import { Address } from "~~/components/scaffold-eth";
 import StakeBalance from "./_components/StakeBalance";
 import Streak from "./_components/Streak";
 import { StakingABI } from "~~/abis/StakingABI";
+import { sepolia } from "viem/chains";
 
 const Stake: NextPage = () => {
   const { address: connectedAddress } = useAccount();
