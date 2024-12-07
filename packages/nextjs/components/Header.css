@@ -1,0 +1,41 @@
+.header-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon-link {
+    display: flex;
+    align-items: center;
+    color: #f9a825;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.icon-link:hover {
+    color: #e69500;
+}
+
+.connect-button {
+    display: flex;
+    align-items: center;
+    background-color: #f9a825;
+    color: #121212;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.connect-button:hover {
+    background-color: #e69500;
+}
+
+.connected-status {
+    font-size: 1rem;
+    color: #f9a825;
+}

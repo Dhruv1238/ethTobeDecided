@@ -48,6 +48,7 @@
     "verify": "yarn workspace @se-2/hardhat verify"
   },
   "devDependencies": {
+    "@types/ethereum-blockies": "^0",
     "husky": "~8.0.3",
     "lint-staged": "~13.2.2"
   },
@@ -59,6 +60,7 @@
     "@apollo/client": "^3.12.2",
     "@apollo/experimental-nextjs-app-support": "^0.11.7",
     "@graphprotocol/graph-cli": "^0.91.1",
+    "ethereum-blockies": "^0.1.1",
     "graphql": "^16.9.0"
   }
 }

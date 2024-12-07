@@ -4395,6 +4395,7 @@ __metadata:
     "@rainbow-me/rainbowkit": 2.1.6
     "@tanstack/react-query": ~5.59.15
     "@trivago/prettier-plugin-sort-imports": ~4.3.0
+    "@types/ethereum-blockies": ^0
     "@types/node": ~18.19.50
     "@types/react": ~18.3.5
     "@typescript-eslint/eslint-plugin": ~5.40.0
@@ -4409,6 +4410,7 @@ __metadata:
     eslint-config-next: ~14.2.15
     eslint-config-prettier: ~8.10.0
     eslint-plugin-prettier: ~5.2.1
+    ethereum-blockies: ^0.1.1
     graphql: ~16.8.1
     next: ~14.2.11
     next-nprogress-bar: ~2.3.13
@@ -4951,6 +4953,13 @@ __metadata:
   version: 1.0.6
   resolution: "@types/estree@npm:1.0.6"
   checksum: 8825d6e729e16445d9a1dd2fb1db2edc5ed400799064cd4d028150701031af012ba30d6d03fe9df40f4d7a437d0de6d2b256020152b7b09bde9f2e420afdffd9
+  languageName: node
+  linkType: hard
+
+"@types/ethereum-blockies@npm:^0":
+  version: 0.1.2
+  resolution: "@types/ethereum-blockies@npm:0.1.2"
+  checksum: 6fc4af1d1a6b804b834e98010c3a9b8ca128dc56c31c28dcbd4617d6b86d76928d5933988d09e9345776250b6cc3fd37063e93da3e6a62f32ba58baa6eaeba08
   languageName: node
   linkType: hard
 
@@ -10228,6 +10237,13 @@ __metadata:
   dependencies:
     fast-safe-stringify: ^2.0.6
   checksum: 5fa31d1a10fdb340733b9a55e38e7687222c501052ca20743cef4d0c911a9bbcc0cad54aa6bf3e4b428604c071ff519803060e1cbc79ddb7c9257c11d407d32a
+  languageName: node
+  linkType: hard
+
+"ethereum-blockies@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "ethereum-blockies@npm:0.1.1"
+  checksum: 96d63f2214302335b9ccf2895151839610b52e20140744574d826ce39b3a663b7a9329631b78d609ba65e5cb4bcc784672a23ef3ee9e608ed4d8443019bf74f8
   languageName: node
   linkType: hard
 
@@ -17094,6 +17110,8 @@ __metadata:
     "@apollo/client": ^3.12.2
     "@apollo/experimental-nextjs-app-support": ^0.11.7
     "@graphprotocol/graph-cli": ^0.91.1
+    "@types/ethereum-blockies": ^0
+    ethereum-blockies: ^0.1.1
     graphql: ^16.9.0
     husky: ~8.0.3
     lint-staged: ~13.2.2

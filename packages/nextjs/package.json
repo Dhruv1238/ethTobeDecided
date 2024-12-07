@@ -23,6 +23,7 @@
     "blo": "~1.2.0",
     "burner-connector": "~0.0.8",
     "daisyui": "4.12.10",
+    "ethereum-blockies": "^0.1.1",
     "graphql": "~16.8.1",
     "next": "~14.2.11",
     "next-nprogress-bar": "~2.3.13",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@graphprotocol/client-cli": "^3.0.4",
     "@trivago/prettier-plugin-sort-imports": "~4.3.0",
+    "@types/ethereum-blockies": "^0",
     "@types/node": "~18.19.50",
     "@types/react": "~18.3.5",
     "@typescript-eslint/eslint-plugin": "~5.40.0",
