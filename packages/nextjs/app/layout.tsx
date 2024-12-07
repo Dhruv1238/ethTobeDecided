@@ -11,9 +11,10 @@ import { FitnessProvider, useFitness } from "~~/context/FitnessContext";
 import "~~/styles/globals.css";
 
 const TokenHandler = ({ children }: { children: React.ReactNode }) => {
-  const { setFitnessData, setAccessToken } = useFitness();
+  const { setFitnessData, setAccessToken,   setRefreshToken } = useFitness();
 
   useEffect(() => {
+    // Check URL parameters first
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("access_token");
     const idToken = urlParams.get("id_token");
@@ -52,31 +53,58 @@ const TokenHandler = ({ children }: { children: React.ReactNode }) => {
           },
         };
 
+        // Fetch fitness data
         try {
-          const response = await axios.post("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", data, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-          });
-          console.log("Fitness Data:", JSON.stringify(response.data));
-          setFitnessData(response.data);
-        } catch (error) {
-          console.error("Fitness API Error:", error);
-        }
-      };
+          const now = new Date();
+          const startOfDay = new Date(now.setHours(0, 0, 0, 0)).getTime();
+          const endOfDay = new Date(now.setHours(23, 59, 59, 999)).getTime();
 
-      fetchFitnessData();
-    }
-  }, [setFitnessData, setAccessToken]);
+          const response = await axios.post(
+            'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
+            {
+              aggregateBy: [{
+                dataTypeName: "com.google.step_count.delta"
+              }],
+              startTimeMillis: startOfDay,
+              endTimeMillis: endOfDay,
+              bucketByTime: { durationMillis: 86400000 }
+            },
+            {
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+
+          setFitnessData(response.data);
+        } catch (error: any) {
+          console.error('Fitness API Error:', error?.response?.data || error);
+          
+          // Clear tokens if unauthorized
+          if (error?.response?.status === 401) {
+            localStorage.removeItem('access_token');
+            setAccessToken(null);
+          }
+        }
+      }
+    };
+
+    handleTokens();
+
+    // Clean up function
+    return () => {
+      // Any cleanup if needed
+    };
+  }, [setFitnessData, setAccessToken, setRefreshToken]);
 
   return <>{children}</>;
 };
 
-const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
+const MomentumApp = ({ children }: { children: React.ReactNode }) => {
   return (
     <html suppressHydrationWarning>
-      <body>
+      <body className="bg-[#1a1a1a] text-white">
         <ThemeProvider enableSystem>
           <ScaffoldEthAppWithProviders>
             <ApolloProvider>
@@ -93,4 +121,4 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default ScaffoldEthApp;
+export default MomentumApp;
