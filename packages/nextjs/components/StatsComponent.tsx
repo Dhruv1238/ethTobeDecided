@@ -7,7 +7,7 @@ interface StatsComponentProps {
   stepsGoal?: number;
 }
 
-const StatsComponent: FC<StatsComponentProps> = ({ stepsGoal = 6000 }) => {
+const StatsComponent: FC<StatsComponentProps> = ({ stepsGoal = 8000 }) => {
   const { fitnessData, fetchFitnessData } = useFitness();
 
   useEffect(() => {
