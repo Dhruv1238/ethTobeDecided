@@ -11,13 +11,25 @@ interface LeaderboardEntry {
 }
 
 export default function Leaderboard() {
-  // Extended sample data for scrolling
-  const leaderboardData: LeaderboardEntry[] = Array.from({ length: 50 }, (_, i) => ({
-    rank: i + 1,
-    address: `0x${Math.random().toString(16).slice(2, 6)}...${Math.random().toString(16).slice(2, 6)}`,
-    score: Math.floor(1500 - (i * 20) + Math.random() * 10),
-    eth: Number((2.5 - (i * 0.05) + Math.random() * 0.1).toFixed(2)),
-  }));
+  // Static sample data
+  const leaderboardData: LeaderboardEntry[] = [
+    { rank: 1, address: "0x1234...5678", score: 1500, eth: 2.50 },
+    { rank: 2, address: "0x8765...4321", score: 1450, eth: 2.45 },
+    { rank: 3, address: "0x9876...1234", score: 1400, eth: 2.40 },
+    { rank: 4, address: "0x5432...8765", score: 1350, eth: 2.35 },
+    { rank: 5, address: "0x2468...1357", score: 1300, eth: 2.30 },
+  ];
+
+  // Generate additional entries with predictable values
+  const extendedData = [...leaderboardData];
+  for (let i = leaderboardData.length + 1; i <= 50; i++) {
+    extendedData.push({
+      rank: i,
+      address: `0x${i.toString().padStart(4, '0')}...${(1000 - i).toString().padStart(4, '0')}`,
+      score: Math.max(0, 1500 - (i * 20)),
+      eth: Number((2.5 - (i * 0.05)).toFixed(2))
+    });
+  }
 
   return (
     <div className="flex flex-col h-screen">
@@ -47,7 +59,7 @@ export default function Leaderboard() {
 
           {/* Scrollable Content */}
           <div className="space-y-3 overflow-y-auto h-[calc(100vh-400px)] pr-2 custom-scrollbar">
-            {leaderboardData.map((entry, index) => (
+            {extendedData.map((entry, index) => (
               <motion.div
                 key={entry.rank}
                 initial={{ opacity: 0, y: 20 }}
@@ -76,7 +88,7 @@ export default function Leaderboard() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col items-end">
-                      <span className="text-primary font-bold">{entry.score}</span>
+                      <span className="text-primary font-bold text-gray-400">{entry.score}</span>
                     </div>
                     <div className="flex flex-col items-end min-w-[80px]">
                       <span className="text-green-500 font-bold">{entry.eth} ETH</span>
@@ -85,24 +97,6 @@ export default function Leaderboard() {
                 </div>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Fixed Stats Section */}
-      <div className="bg-base-300 py-8">
-        <div className="max-w-2xl mx-auto grid grid-cols-3 gap-4 text-center">
-          <div>
-            <h3 className="text-2xl font-bold text-primary">100+</h3>
-            <p className="text-base-content">Total Stakers</p>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-primary">50 ETH</h3>
-            <p className="text-base-content">Total Staked</p>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-primary">10%</h3>
-            <p className="text-base-content">APY</p>
           </div>
         </div>
       </div>
