@@ -15,6 +15,7 @@ import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import ChatSearchBar from "~~/components/ChatSearchBar";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
@@ -25,7 +26,8 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
         <NewHeader />
         <main className="relative flex flex-col flex-1">{children}</main>
         {/* <Footer /> */}
-        <BottomTabs />
+        <ChatSearchBar />
+        {/* <BottomTabs /> */}
       </div>
       <Toaster />
     </>
