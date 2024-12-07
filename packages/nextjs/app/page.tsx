@@ -37,11 +37,11 @@ const Home: NextPage = () => {
           </h1>
 
           <div className="flex justify-center my-4">
-            <StepComponent currentSteps={2000} totalSteps={6000} />
+            <StatsComponent steps={2259} minutes={23} calories={68} stepsGoal={6000} />
           </div>
 
           <div className="flex justify-center my-4">
-            <StatsComponent steps={2259} minutes={23} calories={68} stepsGoal={6000} />
+            <StepComponent currentSteps={2000} totalSteps={6000} />
           </div>
 
 
