@@ -4,21 +4,19 @@ import React from "react";
 import { LEADERBOARD } from "./queries";
 import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
+import { formatEther } from "viem";
 
-interface Transfer {
-  blockTimestamp: string;
-  blockNumber: string;
-  from: string;
+interface UserStake {
   id: string;
-  tokenId: string;
-  transactionHash: string;
-  to: string;
+  user: string;
+  totalStaked: string;
 }
 
-interface TransferCounts {
+interface LeaderboardEntry {
+  rank: number;
   address: string;
-  count: number;
-  tokenIds: string[];
+  totalStaked: string;
+  id: string;
 }
 
 export default function Leaderboard() {
@@ -40,43 +38,23 @@ export default function Leaderboard() {
     );
   }
 
-  // Process transfers data to create leaderboard
-  const addressCounts = data.transfers.reduce((acc: { [key: string]: TransferCounts }, transfer: Transfer) => {
-    // Count both sending and receiving
-    [transfer.from, transfer.to].forEach(address => {
-      if (address !== "0x0000000000000000000000000000000000000000") { // Exclude zero address
-        if (!acc[address]) {
-          acc[address] = {
-            address,
-            count: 0,
-            tokenIds: []
-          };
-        }
-        acc[address].count += 1;
-        if (!acc[address].tokenIds.includes(transfer.tokenId)) {
-          acc[address].tokenIds.push(transfer.tokenId);
-        }
-      }
-    });
-    return acc;
-  }, {});
+  const leaderboardData = data.userStakes.map((stake: UserStake, index: number) => ({
+    rank: index + 1,
+    address: stake.user,
+    totalStaked: formatEther(BigInt(stake.totalStaked)),
+    id: stake.id
+  }));
 
-  // Convert to array and sort by count
-  const leaderboardData = Object.values(addressCounts)
-    .sort((a, b) => b.count - a.count)
-    .map((item, index) => ({
-      ...item,
-      rank: index + 1
-    }));
+  const totalStaked = leaderboardData.reduce((sum: number, entry: LeaderboardEntry) => sum + Number(entry.totalStaked), 0);
 
   return (
     <div className="flex flex-col h-screen">
       {/* Hero Section */}
       <div className="bg-dark-surface py-8">
         <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-4xl font-bold mb-4 text-neon-green glow-text">Top NFT Traders</h1>
+          <h1 className="text-4xl font-bold mb-4 text-neon-green glow-text">Top Stakers</h1>
           <p className="text-gray-300">
-            Most active addresses in NFT transfers on our platform
+            The highest stakers on our platform are showcased here
           </p>
         </div>
       </div>
@@ -88,18 +66,15 @@ export default function Leaderboard() {
           <div className="sticky top-0 bg-darker-surface p-4 rounded-lg mb-3 z-10 shadow-neon-glow">
             <div className="flex justify-between text-sm text-gray-300">
               <span>Rank & Address</span>
-              <div className="flex gap-8">
-                <span>Transfers</span>
-                <span>NFTs</span>
-              </div>
+              <span>Total Staked</span>
             </div>
           </div>
 
           {/* Scrollable Content */}
           <div className="space-y-3 overflow-y-auto h-[calc(100vh-400px)] pr-2 custom-scrollbar">
-            {leaderboardData.map((entry, index) => (
+            {leaderboardData.map((entry: LeaderboardEntry, index: number) => (
               <motion.div
-                key={entry.address}
+                key={entry.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -124,16 +99,11 @@ export default function Leaderboard() {
                       {entry.address.slice(0, 6)}...{entry.address.slice(-4)}
                     </span>
                   </div>
-                  <div className="flex items-center gap-8">
-                    <span className={`font-bold ${
-                      entry.rank === 1 ? 'text-neon-green' : 'text-gray-300'
-                    }`}>
-                      {entry.count}
-                    </span>
-                    <span className="text-gray-300">
-                      {entry.tokenIds.length}
-                    </span>
-                  </div>
+                  <span className={`font-bold ${
+                    entry.rank === 1 ? 'text-neon-green' : 'text-gray-300'
+                  }`}>
+                    {Number(entry.totalStaked).toFixed(4)} ETH
+                  </span>
                 </div>
               </motion.div>
             ))}
@@ -143,24 +113,18 @@ export default function Leaderboard() {
 
       {/* Stats Section */}
       <div className="bg-dark-surface py-6">
-        <div className="max-w-2xl mx-auto grid grid-cols-3 gap-4 text-center">
+        <div className="max-w-2xl mx-auto grid grid-cols-2 gap-4 text-center">
           <div>
             <h3 className="text-2xl font-bold text-neon-green glow-text">
               {leaderboardData.length}
             </h3>
-            <p className="text-gray-300">Total Traders</p>
+            <p className="text-gray-300">Total Stakers</p>
           </div>
           <div>
             <h3 className="text-2xl font-bold text-neon-green glow-text">
-              {data.transfers.length}
+              {totalStaked.toFixed(4)} ETH
             </h3>
-            <p className="text-gray-300">Total Transfers</p>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-neon-green glow-text">
-              {new Set(data.transfers.map((t: Transfer) => t.tokenId)).size}
-            </h3>
-            <p className="text-gray-300">Unique NFTs</p>
+            <p className="text-gray-300">Total Value Staked</p>
           </div>
         </div>
       </div>

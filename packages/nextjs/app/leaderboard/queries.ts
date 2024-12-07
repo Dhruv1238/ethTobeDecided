@@ -2,14 +2,10 @@ import { gql } from "@apollo/client";
 
 export const LEADERBOARD = gql`
   query LeaderBoard {
-    transfers {
-      blockTimestamp
-      blockNumber
-      from
+    userStakes(orderBy: totalStaked, orderDirection: desc) {
+      user
+      totalStaked
       id
-      tokenId
-      transactionHash
-      to
     }
   }
 `;
