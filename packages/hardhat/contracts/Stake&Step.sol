@@ -56,8 +56,8 @@ contract StepStakeDynamicNFT is ERC721URIStorage, Ownable {
     }
 
     // Update daily steps
-    function updateDailySteps(uint256 stepCount) external {
-        StakeInfo storage stakeInfo = userStakes[msg.sender];
+    function updateDailySteps(address wallet, uint256 stepCount) external {
+        StakeInfo storage stakeInfo = userStakes[wallet];
 
         // Ensure user has an active stake
         require(stakeInfo.amount > 0, "No active stake");
@@ -68,46 +68,46 @@ contract StepStakeDynamicNFT is ERC721URIStorage, Ownable {
         // Update step count
         stakeInfo.stepCount = stepCount;
 
-        emit StepsCounted(msg.sender, stepCount);
+        emit StepsCounted(wallet, stepCount);
     }
 
     // Mint NFT and claim stake if goal is met
-    function claimStakeAndMintNFT(string memory imageUrl) external {
-        StakeInfo storage stakeInfo = userStakes[msg.sender];
-
+        function claimStakeAndMintNFT(address wallet, string memory imageUrl) external {
+        StakeInfo storage stakeInfo = userStakes[wallet];
+    
         // Ensure stake exists
         require(stakeInfo.amount > 0, "No active stake");
-
+    
         // Ensure stake period has passed
         require(block.timestamp - stakeInfo.stakeTimestamp <= STAKE_PERIOD, "Stake period expired");
-
+    
         // Ensure not already claimed
         require(!stakeInfo.claimed, "Stake already claimed");
-
+    
         // Check if step goal is met
         if (stakeInfo.stepCount >= DAILY_STEP_GOAL) {
             // Mint unique NFT with provided image URL
             uint256 newTokenId = _tokenIdCounter;
-            _mintDynamicNFT(msg.sender, newTokenId, stakeInfo.stepCount, imageUrl);
-
+            _mintDynamicNFT(wallet, newTokenId, stakeInfo.stepCount, imageUrl);
+    
             // Transfer stake back to user
-            (bool success, ) = payable(msg.sender).call{ value: stakeInfo.amount }("");
+            (bool success, ) = payable(wallet).call{ value: stakeInfo.amount }("");
             require(success, "Transfer failed");
-
+    
             // Mark as claimed
             stakeInfo.claimed = true;
-
-            emit NFTMinted(msg.sender, newTokenId);
+    
+            emit NFTMinted(wallet, newTokenId);
         } else {
             // Forfeit stake if goal not met
             (bool success, ) = payable(owner()).call{ value: stakeInfo.amount }("");
             require(success, "Forfeit transfer failed");
-
-            emit StakeForfeit(msg.sender, stakeInfo.amount);
+    
+            emit StakeForfeit(wallet, stakeInfo.amount);
         }
-
+    
         // Reset stake
-        delete userStakes[msg.sender];
+        delete userStakes[wallet];
     }
 
     // Internal function to mint NFT with dynamic metadata
