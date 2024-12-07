@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import axios from "axios";
 import "@rainbow-me/rainbowkit/styles.css";
+import axios from "axios";
+import { AuthGuard } from "~~/components/AuthGuard";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import { ApolloProvider } from "~~/context/ApolloProvider";
@@ -14,18 +15,18 @@ const TokenHandler = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get('access_token');
-    const idToken = urlParams.get('id_token');
-    const refreshToken = urlParams.get('refresh_token');
+    const accessToken = urlParams.get("access_token");
+    const idToken = urlParams.get("id_token");
+    const refreshToken = urlParams.get("refresh_token");
 
     if (accessToken || idToken || refreshToken) {
-      console.log('Access Token:', accessToken);
-      console.log('ID Token:', idToken);
-      console.log('Refresh Token:', refreshToken);
-      
-      localStorage.setItem('access_token', accessToken || '');
-      localStorage.setItem('id_token', idToken || '');
-      localStorage.setItem('refresh_token', refreshToken || '');
+      console.log("Access Token:", accessToken);
+      console.log("ID Token:", idToken);
+      console.log("Refresh Token:", refreshToken);
+
+      localStorage.setItem("access_token", accessToken || "");
+      localStorage.setItem("id_token", idToken || "");
+      localStorage.setItem("refresh_token", refreshToken || "");
 
       if (accessToken) {
         setAccessToken(accessToken);
@@ -41,31 +42,27 @@ const TokenHandler = ({ children }: { children: React.ReactNode }) => {
         const data = {
           aggregateBy: [
             {
-              dataTypeName: "com.google.step_count.delta"
-            }
+              dataTypeName: "com.google.step_count.delta",
+            },
           ],
           startTimeMillis: startOfDay,
           endTimeMillis: endOfDay,
           bucketByTime: {
-            durationMillis: 86400000 // 24 hours in milliseconds
-          }
+            durationMillis: 86400000, // 24 hours in milliseconds
+          },
         };
 
         try {
-          const response = await axios.post(
-            'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
-            data,
-            {
-              headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-              }
-            }
-          );
-          console.log('Fitness Data:', JSON.stringify(response.data));
+          const response = await axios.post("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", data, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+          console.log("Fitness Data:", JSON.stringify(response.data));
           setFitnessData(response.data);
         } catch (error) {
-          console.error('Fitness API Error:', error);
+          console.error("Fitness API Error:", error);
         }
       };
 
@@ -84,9 +81,9 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
           <ScaffoldEthAppWithProviders>
             <ApolloProvider>
               <FitnessProvider>
-                <TokenHandler>
-                  {children}
-                </TokenHandler>
+                <AuthGuard>
+                  <TokenHandler>{children}</TokenHandler>
+                </AuthGuard>
               </FitnessProvider>
             </ApolloProvider>
           </ScaffoldEthAppWithProviders>
