@@ -1,16 +1,37 @@
-import { NO_EXPIRATION } from "@ethereum-attestation-service/eas-sdk";
-import eas, { schemaIds, encoders } from "./EAS";
-import { ethers } from "ethers";
-import { injected } from "wagmi/connectors";
-import { baseSepolia } from "viem/chains";
+import { NO_EXPIRATION, EAS, SchemaEncoder } from "@ethereum-attestation-service/eas-sdk";
+
+// EAS Contract Address for Base Sepolia
+const EASContractAddress = "0x4200000000000000000000000000000000000015";
+
+// Schema IDs (replace with actual deployed schema IDs)
+const schemaIds = {
+    fitnessChallenge: "0x51a8a63da0f823d83d6355aee1e1643f58247253874fa36a70059b841287960e",
+    stakingGoal: "0x51a8a63da0f823d83d6355aee1e1643f58247253874fa36a70059b841287960e",
+    rewardDistribution: "0x51a8a63da0f823d83d6355aee1e1643f58247253874fa36a70059b841287960e",
+};
+
+// Schema Encoders for each schema
+export const encoders = {
+    fitnessChallenge: new SchemaEncoder("address user, uint256 timestamp, bool success"),
+    stakingGoal: new SchemaEncoder("address user, uint256 timestamp, bool success"),
+    rewardDistribution: new SchemaEncoder("address user, uint256 timestamp, bool success"),
+};
 
 // Generalized attestation function
 export async function attestToSchema(
     schemaKey: keyof typeof schemaIds,
-    attestationData: any,
-    // privateKey: string
+    attestationData: { name: string, value: any, type: string }[],
+    signer: any
 ) {
     try {
+        // Ensure signer is connected
+        if (!signer) {
+            throw new Error("No signer provided");
+        }
+
+        const eas = new EAS(EASContractAddress);
+        eas.connect(signer);
+
         const schemaId = schemaIds[schemaKey];
         const encoder = encoders[schemaKey];
 
@@ -21,35 +42,35 @@ export async function attestToSchema(
         // Encode attestation data
         const encodedData = encoder.encodeData(attestationData);
 
-        // Initialize signer (replace with your wallet setup)
-        const wallet = new ethers.Wallet(privateKey, ethers.getDefaultProvider("base-sepolia"));
-
-        // Connect wallet to EAS
-        eas.connect(wallet);
+        // Ensure recipient is a valid address
+        const recipient = attestationData.find(item => item.name === 'user')?.value;
+        if (!recipient) {
+            throw new Error("Recipient address is required");
+        }
 
         // Create attestation
         const tx = await eas.attest({
             schema: schemaId,
             data: {
-                recipient: attestationData[0].value, // Assume recipient is the first field
-                expirationTime: NO_EXPIRATION, // Never expires
-                revocable: false, // Cannot be revoked
+                recipient: recipient,
+                expirationTime: NO_EXPIRATION,
+                revocable: true, // Changed to true for more flexibility
                 data: encodedData,
             },
         });
 
-        console.log(`Transaction hash for ${schemaKey}:`, tx.hash);
-
-        // Wait for confirmation
+        // Wait for transaction confirmation
         const receipt = await tx.wait();
-        console.log(`${schemaKey} attestation created successfully:`, receipt);
 
-        // Extract attestation ID from logs
+        // Extract attestation ID
         const attestationId = receipt.logs[0].topics[1];
-        console.log(`${schemaKey} Attestation ID:`, attestationId);
+        
+        console.log(`Attestation created successfully. Transaction receipt: ${tx.receipt}`);
+        console.log(`Attestation ID: ${attestationId}`);
+
         return attestationId;
     } catch (error) {
-        console.error(`Error attesting to ${schemaKey}:`, error);
+        console.error("Attestation Error:", error);
         throw error;
     }
 }
@@ -58,11 +79,11 @@ export async function attestToSchema(
 export async function attestFitnessChallenge(
     userAddress: string,
     success: boolean,
-    // privateKey: string
+    signer: any
 ) {
     return attestToSchema("fitnessChallenge", [
         { name: "user", value: userAddress, type: "address" },
         { name: "timestamp", value: Math.floor(Date.now() / 1000), type: "uint256" },
         { name: "success", value: success, type: "bool" },
-    ]);
+    ], signer);
 }
