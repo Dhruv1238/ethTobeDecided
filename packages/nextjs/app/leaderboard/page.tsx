@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { LEADERBOARD } from "./queries";
 import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
 import { formatEther } from "viem";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 
 interface UserStake {
@@ -21,6 +23,7 @@ interface LeaderboardEntry {
 }
 
 export default function Leaderboard() {
+  const router = useRouter();
   const { data, loading, error } = useQuery(LEADERBOARD);
 
   if (loading) {
@@ -54,7 +57,13 @@ export default function Leaderboard() {
   return (
     <div className="flex flex-col h-screen">
       {/* Hero Section */}
-      <div className="bg-dark-surface py-8">
+      <div className="bg-dark-surface py-8 relative">
+        <button
+          onClick={() => router.push("/")}
+          className="absolute left-4 top-1/3 -translate-y-1/2 p-2 text-neon-green hover:text-white transition-colors"
+        >
+          <ArrowLeftIcon className="h-6 w-6" />
+        </button>
         <div className="max-w-2xl mx-auto text-center">
           <h1 className="text-4xl font-bold mb-4 text-neon-green glow-text">Top Stakers</h1>
           <p className="text-gray-300">The highest stakers on our platform are showcased here</p>

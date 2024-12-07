@@ -11,7 +11,8 @@ const LoginPage = () => {
 
   const handleSignUp = () => {
     setIsLoading(true);
-    window.location.href = "https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=http%3A%2F%2Flocalhost%3A3000/";    
+    window.location.href =
+      "https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=http%3A%2F%2Flocalhost%3A3000/";
   };
 
   const handleDemoLogin = () => {
@@ -38,13 +39,7 @@ const LoginPage = () => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
           >
-            <Image
-              src="/logo.png"
-              alt="StakeFIT Logo"
-              width={150}
-              height={150}
-              className="mx-auto mb-4"
-            />
+            <Image src="/logo.png" alt="StakeFIT Logo" width={150} height={150} className="mx-auto mb-4" />
           </motion.div>
           <h1 className="text-4xl font-bold text-[#fbf8fe] mb-2">Welcome to StakeFIT</h1>
           <p className="text-[#a3a2a7]">Stake your health, earn rewards</p>
