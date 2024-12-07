@@ -1,41 +1,24 @@
 .header-container {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
 }
 
-.icon-link {
-    display: flex;
-    align-items: center;
-    color: #f9a825;
-    text-decoration: none;
-    transition: color 0.3s ease;
+.network-selector-btn {
+    transition: all 0.2s;
 }
 
-.icon-link:hover {
-    color: #e69500;
-}
-
-.connect-button {
-    display: flex;
-    align-items: center;
-    background-color: #f9a825;
-    color: #121212;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.connect-button:hover {
-    background-color: #e69500;
+.network-selector-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .connected-status {
-    font-size: 1rem;
-    color: #f9a825;
+    transition: all 0.2s;
+}
+
+.connected-status:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.profile-pic {
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
