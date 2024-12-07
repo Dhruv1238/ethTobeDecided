@@ -6,6 +6,7 @@ import { LEADERBOARD } from "./queries";
 import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
 import { formatEther } from "viem";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 
 interface UserStake {
