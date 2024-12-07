@@ -59,6 +59,7 @@
   "dependencies": {
     "@apollo/client": "^3.12.2",
     "@apollo/experimental-nextjs-app-support": "^0.11.7",
+    "@ethereum-attestation-service/eas-sdk": "^2.7.0",
     "@graphprotocol/graph-cli": "^0.91.1",
     "ethereum-blockies": "^0.1.1",
     "framer-motion": "^11.13.1",
