@@ -5,6 +5,7 @@ import { LEADERBOARD } from "./queries";
 import { useQuery } from "@apollo/client";
 import { motion } from "framer-motion";
 import { formatEther } from "viem";
+import { Address } from "~~/components/scaffold-eth";
 
 interface UserStake {
   id: string;
@@ -105,7 +106,7 @@ export default function Leaderboard() {
                       <span className="font-bold">{entry.rank}</span>
                     </div>
                     <span className="text-gray-300 font-mono">
-                      {entry.address.slice(0, 6)}...{entry.address.slice(-4)}
+                      <Address address={entry.address} format="short" />
                     </span>
                   </div>
                   <span className={`font-bold ${entry.rank === 1 ? "text-neon-green" : "text-gray-300"}`}>
