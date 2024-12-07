@@ -2,26 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 const LoginPage = () => {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignUp = () => {
     setIsLoading(true);
     window.location.href =
       "https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=http%3A%2F%2Flocalhost%3A3000/";
-  };
-
-  const handleDemoLogin = () => {
-    setIsLoading(true);
-    // Simulate loading
-    setTimeout(() => {
-      router.push("/");
-      setIsLoading(false);
-    }, 1000);
   };
 
   return (

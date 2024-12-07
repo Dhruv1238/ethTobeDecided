@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 type HeaderMenuLink = {
   label: string;
@@ -21,10 +21,10 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
-  label: "Subgraph",
-  href: "/subgraph",
-  icon: <MagnifyingGlassIcon className="h-4 w-4" />,
-},
+    label: "Subgraph",
+    href: "/subgraph",
+    icon: <MagnifyingGlassIcon className="h-4 w-4" />,
+  },
   {
     label: "Debug Contracts",
     href: "/debug",

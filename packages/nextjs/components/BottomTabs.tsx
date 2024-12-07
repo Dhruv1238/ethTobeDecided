@@ -12,6 +12,8 @@ import { FaGamepad, FaHome, FaTrophy, FaWallet } from "react-icons/fa";
 
 // components/BottomTabs.tsx
 
+// components/BottomTabs.tsx
+
 export const BottomTabs = () => {
   const router = useRouter();
 

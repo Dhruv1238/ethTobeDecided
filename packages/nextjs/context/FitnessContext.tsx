@@ -9,8 +9,6 @@ interface FitnessContextType {
   fetchFitnessData: () => Promise<void>;
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
-  refreshToken: string | null;
-  setRefreshToken: (token: string | null) => void;
 }
 
 const FitnessContext = createContext<FitnessContextType | undefined>(undefined);
@@ -18,7 +16,6 @@ const FitnessContext = createContext<FitnessContextType | undefined>(undefined);
 export function FitnessProvider({ children }: { children: React.ReactNode }) {
   const [fitnessData, setFitnessData] = useState(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   const fetchFitnessData = useCallback(async () => {
     if (!accessToken) return;

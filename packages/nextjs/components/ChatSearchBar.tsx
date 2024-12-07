@@ -1,6 +1,6 @@
-import { FC, useState, useEffect } from "react";
-import { MagnifyingGlassIcon, PaperAirplaneIcon, XMarkIcon, TrophyIcon } from "@heroicons/react/24/outline";
-import { motion, AnimatePresence } from "framer-motion";
+import { FC, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { MagnifyingGlassIcon, PaperAirplaneIcon, TrophyIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface Message {
   text: string;
@@ -49,10 +49,11 @@ Reply 'done' when you've completed the challenge.`;
     // Bot response logic
     setTimeout(() => {
       let botResponse = "This is a sample response from the bot.";
-      
+
       // Check if user completed challenge
       if (inputText.toLowerCase() === "done") {
-        botResponse = "Congratulations! 🎉 You've completed today's challenge. Your reward of 0.01 ETH will be processed shortly.";
+        botResponse =
+          "Congratulations! 🎉 You've completed today's challenge. Your reward of 0.01 ETH will be processed shortly.";
       }
 
       setMessages(prev => [
@@ -81,8 +82,8 @@ Reply 'done' when you've completed the challenge.`;
               y: 10,
               transition: {
                 duration: 0.2,
-                ease: "easeOut"
-              }
+                ease: "easeOut",
+              },
             }}
             className="fixed bottom-24 left-4 z-50"
           >
@@ -100,9 +101,7 @@ Reply 'done' when you've completed the challenge.`;
               <div className="absolute inset-0 bg-[#11ce6f] rounded-xl blur-lg opacity-30"></div>
 
               <div className="relative bg-gradient-to-r from-[#000001] to-[#1a1a1a] p-3 rounded-xl border border-[#11ce6f]">
-                <p className="text-[#11ce6f] text-sm font-bold whitespace-nowrap">
-                  Daily Challenge is here! 💪
-                </p>
+                <p className="text-[#11ce6f] text-sm font-bold whitespace-nowrap">Daily Challenge is here! 💪</p>
                 {/* Arrow pointing down */}
                 <div className="absolute bottom-[-20px] left-1/2 transform -translate-x-1/2">
                   <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-[#11ce6f]"></div>
@@ -136,7 +135,7 @@ Reply 'done' when you've completed the challenge.`;
                 className={`max-w-[70%] rounded-xl p-3 
                 ${message.isUser ? "bg-[#11ce6f] text-[#fbf8fe]" : "bg-[#000001] text-[#fbf8fe]"}`}
               >
-                {message.text.split('\n').map((line, i) => (
+                {message.text.split("\n").map((line, i) => (
                   <div key={i}>{line}</div>
                 ))}
               </div>

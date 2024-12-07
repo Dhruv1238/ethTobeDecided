@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { parseEther } from "viem";
-import { sepolia, baseSepolia } from "viem/chains";
+import { baseSepolia, sepolia } from "viem/chains";
 import { useAccount, useChainId, useConnect, useSwitchChain, useWriteContract } from "wagmi";
 import { injected } from "wagmi/connectors";
 

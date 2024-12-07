@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Address } from "~~/components/scaffold-eth";
 import { GetGreetingsDocument, execute } from "~~/.graphclient";
+import { Address } from "~~/components/scaffold-eth";
 
 const GreetingsTable = () => {
   const [greetingsData, setGreetingsData] = useState<any>(null);

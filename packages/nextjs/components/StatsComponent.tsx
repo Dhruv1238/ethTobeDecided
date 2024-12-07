@@ -55,30 +55,9 @@ const StatsComponent: FC<StatsComponentProps> = ({ stepsGoal = 6000 }) => {
       <div className="w-20 h-full ml-auto">
         <svg viewBox="0 0 100 100" className="transform -rotate-90 w-full h-full">
           {/* Background circles */}
-          <circle
-            cx="50"
-            cy="50"
-            r="40"
-            fill="none"
-            stroke="#ec489922"
-            strokeWidth="8"
-          />
-          <circle
-            cx="50"
-            cy="50"
-            r="30"
-            fill="none"
-            stroke="#3b82f622"
-            strokeWidth="8"
-          />
-          <circle
-            cx="50"
-            cy="50"
-            r="20"
-            fill="none"
-            stroke="#11ce6f22"
-            strokeWidth="8"
-          />
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#ec489922" strokeWidth="8" />
+          <circle cx="50" cy="50" r="30" fill="none" stroke="#3b82f622" strokeWidth="8" />
+          <circle cx="50" cy="50" r="20" fill="none" stroke="#11ce6f22" strokeWidth="8" />
 
           {/* Progress circles */}
           <circle

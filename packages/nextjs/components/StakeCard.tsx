@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { parseEther } from "viem";
+import { baseSepolia } from "viem/chains";
 import { useAccount, useBalance, useChainId, useConnect, useSwitchChain, useWriteContract } from "wagmi";
 import { injected } from "wagmi/connectors";
-import { baseSepolia } from "viem/chains";
 
 interface StakeCardProps {
   contractAddress: `0x${string}`;
@@ -71,27 +71,21 @@ const StakeCard: React.FC<StakeCardProps> = ({ contractAddress, contractABI }) =
     <div className="card bg-dark-surface shadow-neon-glow w-full max-w-md mx-auto">
       <div className="card-body">
         <h2 className="card-title text-neon-green mb-4">Stake ETH</h2>
-        
+
         {/* Network Warning */}
         {currentChainId !== baseSepolia.id && isConnected && (
-          <div className="alert alert-warning text-sm mb-4">
-            Wrong network. Please switch to Base Sepolia
-          </div>
+          <div className="alert alert-warning text-sm mb-4">Wrong network. Please switch to Base Sepolia</div>
         )}
 
         {/* Balance Display */}
-        {balance && (
-          <div className="text-gray-300 mb-4">
-            Balance: {parseFloat(balance.formatted).toFixed(4)} ETH
-          </div>
-        )}
+        {balance && <div className="text-gray-300 mb-4">Balance: {parseFloat(balance.formatted).toFixed(4)} ETH</div>}
 
         {/* Stake Input */}
         <div className="form-control">
           <input
             type="text"
             value={stakeAmount}
-            onChange={(e) => {
+            onChange={e => {
               const value = e.target.value;
               if (value === "" || /^\d*\.?\d*$/.test(value)) {
                 setStakeAmount(value);
@@ -118,16 +112,10 @@ const StakeCard: React.FC<StakeCardProps> = ({ contractAddress, contractABI }) =
                 : "Stake ETH"}
         </button>
         {/* Status Messages */}
-        {isSuccess && (
-          <div className="alert alert-success text-sm mt-4">
-            Successfully staked!
-          </div>
-        )}
+        {isSuccess && <div className="alert alert-success text-sm mt-4">Successfully staked!</div>}
 
         {(isError || networkError) && (
-          <div className="alert alert-error text-sm mt-4">
-            {networkError || error?.message || "Failed to stake"}
-          </div>
+          <div className="alert alert-error text-sm mt-4">{networkError || error?.message || "Failed to stake"}</div>
         )}
       </div>
     </div>
