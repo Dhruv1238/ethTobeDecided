@@ -27,7 +27,7 @@ const Home: NextPage = () => {
           </h1>
 
           <div className="flex justify-center my-4">
-            <StepComponent currentSteps={2259} totalSteps={6000} />
+            <StepComponent currentSteps={4000} totalSteps={6000} />
           </div>
 
 
