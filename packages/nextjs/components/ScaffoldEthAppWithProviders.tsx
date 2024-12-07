@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { WagmiProvider } from "wagmi";
 import { Footer } from "~~/components/Footer";
 import { BottomTabs } from "~~/components/BottomTabs";
+import { NewHeader } from "~~/components/NewHeader";
 import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
@@ -21,7 +22,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <div className={`flex flex-col min-h-screen `}>
-        <Header />
+        <NewHeader />
         <main className="relative flex flex-col flex-1">{children}</main>
         {/* <Footer /> */}
         <BottomTabs />
