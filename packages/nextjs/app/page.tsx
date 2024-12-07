@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { GET_PROTOCOLS_AND_TRANSCODERS } from "./query";
-import { useQuery } from "@apollo/client";
+// import { GET_PROTOCOLS_AND_TRANSCODERS } from "./query";
+// import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
@@ -11,11 +11,11 @@ import { Address } from "~~/components/scaffold-eth";
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
-  const { loading, error, data } = useQuery(GET_PROTOCOLS_AND_TRANSCODERS);
+  // const { loading, error, data } = useQuery(GET_PROTOCOLS_AND_TRANSCODERS);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  console.log(data);
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+  // console.log(data);
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
