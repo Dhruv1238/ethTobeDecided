@@ -89,3 +89,9 @@ type Transfer @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+type UserStake @entity {
+  id: ID!
+  user: Bytes!
+  totalStaked: BigInt!
+}
