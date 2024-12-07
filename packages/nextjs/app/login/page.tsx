@@ -11,16 +11,8 @@ const LoginPage = () => {
 
   const handleSignUp = () => {
     setIsLoading(true);
-    window.location.href = "https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=http%3A%2F%2Flocalhost%3A3000/";    
-  };
-
-  const handleDemoLogin = () => {
-    setIsLoading(true);
-    // Simulate loading
-    setTimeout(() => {
-      router.push("/");
-      setIsLoading(false);
-    }, 1000);
+    const ngrokUrl = "https://1f8b-14-195-142-82.ngrok-free.app/";
+    window.location.href = `https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=${encodeURIComponent(ngrokUrl)}/`;
   };
 
   return (
@@ -38,16 +30,10 @@ const LoginPage = () => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
           >
-            <Image
-              src="/logo.png"
-              alt="StakeFIT Logo"
-              width={150}
-              height={150}
-              className="mx-auto mb-4"
-            />
+            <Image src="/logo.png" alt="Momentum Logo" width={150} height={150} className="mx-auto mb-4" />
           </motion.div>
-          <h1 className="text-4xl font-bold text-[#fbf8fe] mb-2">Welcome to StakeFIT</h1>
-          <p className="text-[#a3a2a7]">Stake your health, earn rewards</p>
+          <h1 className="text-4xl font-bold text-[#fbf8fe] mb-2">Welcome to Momentum</h1>
+          <p className="text-[#a3a2a7]">Track your steps, earn rewards</p>
         </div>
 
         {/* Login Card */}
@@ -58,7 +44,6 @@ const LoginPage = () => {
           className="bg-[#2d2c2e] rounded-2xl p-8 shadow-xl border border-[#000001]"
         >
           <div className="space-y-6">
-            {/* Demo Account Button */}
             <button
               onClick={handleSignUp}
               disabled={isLoading}

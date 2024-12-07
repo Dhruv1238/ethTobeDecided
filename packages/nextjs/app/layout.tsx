@@ -9,66 +9,80 @@ import { ThemeProvider } from "~~/components/ThemeProvider";
 import { ApolloProvider } from "~~/context/ApolloProvider";
 import { FitnessProvider, useFitness } from "~~/context/FitnessContext";
 import "~~/styles/globals.css";
+import { useAuth, AuthProvider } from "~~/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const TokenHandler = ({ children }: { children: React.ReactNode }) => {
-  const { setFitnessData, setAccessToken } = useFitness();
+  const { setTokens, accessToken } = useAuth();
+  const { setFitnessData } = useFitness();
+  const router = useRouter();
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("access_token");
-    const idToken = urlParams.get("id_token");
-    const refreshToken = urlParams.get("refresh_token");
+    const handleTokens = async () => {
+      // Only process tokens if they're in the URL
+      if (!window.location.search.includes('access_token')) return;
 
-    if (accessToken || idToken || refreshToken) {
-      console.log("Access Token:", accessToken);
-      console.log("ID Token:", idToken);
-      console.log("Refresh Token:", refreshToken);
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const newAccessToken = urlParams.get("access_token");
+        const idToken = urlParams.get("id_token");
+        const refreshToken = urlParams.get("refresh_token");
 
-      localStorage.setItem("access_token", accessToken || "");
-      localStorage.setItem("id_token", idToken || "");
-      localStorage.setItem("refresh_token", refreshToken || "");
-
-      if (accessToken) {
-        setAccessToken(accessToken);
+        if (newAccessToken) {
+          // Set tokens first
+          await setTokens(newAccessToken, idToken, refreshToken);
+          
+          // Clear URL parameters
+          window.history.replaceState({}, '', '/');
+          
+          // Force reload to clear any stale state
+          window.location.href = '/';
+        }
+      } catch (error) {
+        console.error("Error handling tokens:", error);
+        router.push('/login');
       }
+    };
 
-      // Fetch fitness data
-      const fetchFitnessData = async () => {
-        // Get today's start and end timestamps
+    handleTokens();
+  }, []); // Empty dependency array as we only want this to run once
+
+  // Separate effect for fitness data
+  useEffect(() => {
+    if (!accessToken) return;
+
+    const fetchFitnessData = async () => {
+      try {
         const now = new Date();
         const startOfDay = new Date(now.setHours(0, 0, 0, 0)).getTime();
         const endOfDay = new Date(now.setHours(23, 59, 59, 999)).getTime();
 
-        const data = {
-          aggregateBy: [
-            {
-              dataTypeName: "com.google.step_count.delta",
-            },
-          ],
-          startTimeMillis: startOfDay,
-          endTimeMillis: endOfDay,
-          bucketByTime: {
-            durationMillis: 86400000, // 24 hours in milliseconds
+        const response = await axios.post(
+          "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate",
+          {
+            aggregateBy: [{
+              dataTypeName: "com.google.step_count.delta"
+            }],
+            startTimeMillis: startOfDay,
+            endTimeMillis: endOfDay,
+            bucketByTime: { durationMillis: 86400000 }
           },
-        };
-
-        try {
-          const response = await axios.post("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", data, {
+          {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-          });
-          console.log("Fitness Data:", JSON.stringify(response.data));
-          setFitnessData(response.data);
-        } catch (error) {
-          console.error("Fitness API Error:", error);
-        }
-      };
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        
+        setFitnessData(response.data);
+      } catch (error) {
+        console.error("Fitness API Error:", error);
+      }
+    };
 
-      fetchFitnessData();
-    }
-  }, [setFitnessData, setAccessToken]);
+    fetchFitnessData();
+  }, [accessToken, setFitnessData]);
 
   return <>{children}</>;
 };
@@ -78,15 +92,17 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
     <html suppressHydrationWarning>
       <body>
         <ThemeProvider enableSystem>
-          <ScaffoldEthAppWithProviders>
-            <ApolloProvider>
-              <FitnessProvider>
-                <AuthGuard>
-                  <TokenHandler>{children}</TokenHandler>
-                </AuthGuard>
-              </FitnessProvider>
-            </ApolloProvider>
-          </ScaffoldEthAppWithProviders>
+          <AuthProvider>
+            <ScaffoldEthAppWithProviders>
+              <ApolloProvider>
+                <FitnessProvider>
+                  <AuthGuard>
+                    <TokenHandler>{children}</TokenHandler>
+                  </AuthGuard>
+                </FitnessProvider>
+              </ApolloProvider>
+            </ScaffoldEthAppWithProviders>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
