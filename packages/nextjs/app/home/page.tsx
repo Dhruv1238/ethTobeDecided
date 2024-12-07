@@ -5,9 +5,11 @@ import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
 import StakeBalance from "./_components/StakeBalance";
 import Streak from "./_components/Streak";
+import { StakingABI } from "~~/abis/StakingABI";
 
 const Stake: NextPage = () => {
   const { address: connectedAddress } = useAccount();
+  const contractAddress = "0x0000000000000000000000000000000000000000";
 
   return (
     <div className="flex items-center flex-col flex-grow pt-10">
@@ -19,7 +21,11 @@ const Stake: NextPage = () => {
           <p className="my-2 font-medium">Connected Address:</p>
           <Address address={connectedAddress} /> 
         </div>*/}   
-        <StakeBalance initialBalance={0.05} /> 
+        <StakeBalance 
+            initialBalance={0.05} 
+            contractAddress={contractAddress}
+            contractABI={StakingABI}
+        /> 
         <Streak />
       </div>
     </div>
