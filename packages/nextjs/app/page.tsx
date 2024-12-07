@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { PanInfo, motion, useMotionValue, useTransform } from "framer-motion";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { StakingABI } from "~~/abis/StakingABI";
-import StakeButton from "~~/components/StakeButton";
 import StakeCard from "~~/components/StakeCard";
 import StatsComponent from "~~/components/StatsComponent";
 import StepComponent from "~~/components/StepComponent";
@@ -23,15 +22,15 @@ const Home: NextPage = () => {
   const contractAddress = "0x52dE6508FECCA4d712b75b0bD018a621EaF2d734" as `0x${string}`;
   const contractABI = StakingABI;
 
-  const bgOpacity = useTransform(y, [0, 150], [0, 0.5]);
+  const bgOpacity = useTransform(y, [0, 150], [0, isDragging ? 0.7 : 0.5]);
 
-  const handleDrag = (_, info) => {
+  const handleDrag = (_: any, info: PanInfo) => {
     if (info.offset.y > 150) {
       setIsDragging(true);
     }
   };
 
-  const handleDragEnd = (_, info) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.y > 150) {
       y.set(window.innerHeight);
       setTimeout(() => {
