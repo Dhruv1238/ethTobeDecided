@@ -13,15 +13,15 @@ import { Address } from "~~/components/scaffold-eth";
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
-  const contractAddress = "0x0000000000000000000000000000000000000000" as `0x${string}`;
+  const contractAddress = "0x52dE6508FECCA4d712b75b0bD018a621EaF2d734" as `0x${string}`;
   const contractABI = StakingABI;
 
   return (
     <>
       {/* Floating Stake Button - Always visible */}
-      {/* <div className="fixed right-0 bottom-8 z-50 flex items-center">
+      <div className="fixed right-0 bottom-8 z-50 flex items-center">
         <StakeButton contractAddress={contractAddress} contractABI={contractABI} />
-      </div> */}
+      </div>
 
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
@@ -37,11 +37,11 @@ const Home: NextPage = () => {
           </h1>
 
           <div className="flex justify-center my-4">
-            <StatsComponent stepsGoal={8000} />
+            <StatsComponent stepsGoal={6000} />
           </div>
 
           <div className="flex justify-center my-4">
-            <StepComponent totalSteps={8000} />
+            <StepComponent  totalSteps={6000} />
           </div>
 
           {/* Stake Card with CTA Arrow */}

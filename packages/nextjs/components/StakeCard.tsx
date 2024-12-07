@@ -20,28 +20,13 @@ const StakeCard: React.FC<StakeCardProps> = ({ contractAddress, contractABI }) =
   const currentChainId = useChainId();
   const { writeContract, isPending, isSuccess, isError, error } = useWriteContract();
 
-  const BASE_SEPOLIA = {
-    id: 84532,
-    name: "Base Sepolia",
-    network: "base-sepolia",
-    nativeCurrency: { decimals: 18, name: "Base Sepolia Ether", symbol: "ETH" },
-    rpcUrls: {
-      default: { http: ["https://sepolia.base.org"] },
-      public: { http: ["https://sepolia.base.org"] },
-    },
-    blockExplorers: {
-      default: { name: "BaseScan", url: "https://sepolia.basescan.org" },
-    },
-    testnet: true,
-  };
-
   const { data: balance } = useBalance({
     address,
-    chainId: BASE_SEPOLIA.id,
+    chainId: baseSepolia.id,
   });
 
   useEffect(() => {
-    if (isConnected && currentChainId !== BASE_SEPOLIA.id) {
+    if (isConnected && currentChainId !== baseSepolia.id) {
       setNetworkError("Please switch to Base Sepolia network");
     } else {
       setNetworkError("");
@@ -55,8 +40,8 @@ const StakeCard: React.FC<StakeCardProps> = ({ contractAddress, contractABI }) =
         return;
       }
 
-      if (currentChainId !== BASE_SEPOLIA.id) {
-        await switchChain({ chainId: BASE_SEPOLIA.id });
+      if (currentChainId !== baseSepolia.id) {
+        await switchChain({ chainId: baseSepolia.id });
         return;
       }
 
@@ -87,7 +72,7 @@ const StakeCard: React.FC<StakeCardProps> = ({ contractAddress, contractABI }) =
         <h2 className="card-title text-neon-green mb-4">Stake ETH</h2>
         
         {/* Network Warning */}
-        {currentChainId !== BASE_SEPOLIA.id && isConnected && (
+        {currentChainId !== baseSepolia.id && isConnected && (
           <div className="alert alert-warning text-sm mb-4">
             Wrong network. Please switch to Base Sepolia
           </div>
@@ -125,13 +110,12 @@ const StakeCard: React.FC<StakeCardProps> = ({ contractAddress, contractABI }) =
         >
           {!isConnected
             ? "Connect Wallet"
-            : currentChainId !== BASE_SEPOLIA.id
+            : currentChainId !== baseSepolia.id
               ? "Switch Network"
               : isPending
                 ? "Staking..."
                 : "Stake ETH"}
         </button>
-
         {/* Status Messages */}
         {isSuccess && (
           <div className="alert alert-success text-sm mt-4">
