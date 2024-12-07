@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { parseEther } from "viem";
-import { baseSepolia } from "viem/chains";  // Changed to baseSepolia
-import { useAccount, useChainId, useConnect, useSwitchChain, useWriteContract, useBalance } from "wagmi";
+import { baseSepolia } from "viem/chains";
+// Changed to baseSepolia
+import { useAccount, useBalance, useChainId, useConnect, useSwitchChain, useWriteContract } from "wagmi";
 import { injected } from "wagmi/connectors";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface FloatingStakeButtonProps {
   contractAddress: `0x${string}`;
@@ -26,23 +27,23 @@ const FloatingStakeButton: React.FC<FloatingStakeButtonProps> = ({ contractAddre
   // Define Base Sepolia chain if not available in viem
   const BASE_SEPOLIA = {
     id: 84532,
-    name: 'Base Sepolia',
-    network: 'base-sepolia',
+    name: "Base Sepolia",
+    network: "base-sepolia",
     nativeCurrency: {
       decimals: 18,
-      name: 'Base Sepolia Ether',
-      symbol: 'ETH',
+      name: "Base Sepolia Ether",
+      symbol: "ETH",
     },
     rpcUrls: {
-      default: { http: ['https://sepolia.base.org'] },
-      public: { http: ['https://sepolia.base.org'] },
+      default: { http: ["https://sepolia.base.org"] },
+      public: { http: ["https://sepolia.base.org"] },
     },
     blockExplorers: {
-      default: { name: 'BaseScan', url: 'https://sepolia.basescan.org' },
+      default: { name: "BaseScan", url: "https://sepolia.basescan.org" },
     },
     testnet: true,
   };
-  
+
   // Get user's Base Sepolia ETH balance
   const { data: balance } = useBalance({
     address,
@@ -101,7 +102,6 @@ const FloatingStakeButton: React.FC<FloatingStakeButtonProps> = ({ contractAddre
         args: [],
         value: stakeAmountWei,
       });
-
     } catch (err: any) {
       console.error("Staking error:", err);
       setNetworkError(err.message || "Failed to stake");
@@ -116,7 +116,7 @@ const FloatingStakeButton: React.FC<FloatingStakeButtonProps> = ({ contractAddre
   };
 
   return (
-    <div className="fixed bottom-8 right-8">
+    <div className="fixed bottom-24 right-4">
       <AnimatePresence>
         {!isExpanded ? (
           <motion.button
@@ -138,10 +138,7 @@ const FloatingStakeButton: React.FC<FloatingStakeButtonProps> = ({ contractAddre
             <div className="flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <h3 className="font-bold">Stake on Base Sepolia</h3>
-                <button
-                  onClick={() => setIsExpanded(false)}
-                  className="btn btn-circle btn-sm btn-ghost"
-                >
+                <button onClick={() => setIsExpanded(false)} className="btn btn-circle btn-sm btn-ghost">
                   ×
                 </button>
               </div>
@@ -157,9 +154,7 @@ const FloatingStakeButton: React.FC<FloatingStakeButtonProps> = ({ contractAddre
 
               {/* Balance Display */}
               {balance && (
-                <div className="text-sm text-gray-600">
-                  Balance: {parseFloat(balance.formatted).toFixed(4)} ETH
-                </div>
+                <div className="text-sm text-gray-600">Balance: {parseFloat(balance.formatted).toFixed(4)} ETH</div>
               )}
 
               <input
@@ -174,15 +169,20 @@ const FloatingStakeButton: React.FC<FloatingStakeButtonProps> = ({ contractAddre
               <button
                 onClick={handleStake}
                 className={`btn btn-primary w-full ${isPending ? "loading" : ""}`}
-                disabled={!stakeAmount || parseFloat(stakeAmount) <= 0 || isPending || (isConnected && currentChainId !== BASE_SEPOLIA.id)}
+                disabled={
+                  !stakeAmount ||
+                  parseFloat(stakeAmount) <= 0 ||
+                  isPending ||
+                  (isConnected && currentChainId !== BASE_SEPOLIA.id)
+                }
               >
-                {!isConnected 
-                  ? "Connect Wallet" 
-                  : currentChainId !== BASE_SEPOLIA.id 
-                  ? "Switch to Base Sepolia" 
-                  : isPending 
-                  ? "Staking..." 
-                  : "Stake ETH"}
+                {!isConnected
+                  ? "Connect Wallet"
+                  : currentChainId !== BASE_SEPOLIA.id
+                    ? "Switch to Base Sepolia"
+                    : isPending
+                      ? "Staking..."
+                      : "Stake ETH"}
               </button>
 
               {isSuccess && (
