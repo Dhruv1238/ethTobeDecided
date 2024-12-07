@@ -51,6 +51,7 @@ const config: HardhatUserConfig = {
         url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
+      
     },
     mainnet: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
@@ -148,4 +149,23 @@ const config: HardhatUserConfig = {
   },
 };
 
+
 export default config;
+
+import { task } from "hardhat/config";
+
+// Define the custom task here
+task("transfer-ownership", "Transfers ownership of the NFT")
+  .addParam("contract", "The contract's address")
+  .addParam("newOwner", "The new owner's address")
+  .setAction(async ({ contract, newOwner }, { ethers, getNamedAccounts }) => {
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.provider.getSigner(deployer);
+    const nft = await ethers.getContractAt("StepStakeDynamicNFT", contract, signer);
+    
+    console.log(`Initiating ownership transfer from deployer (${deployer}) to new owner (${newOwner}).`);
+    const tx = await nft.transferOwnership(newOwner);
+    console.log(`Transaction sent. Tx hash: ${tx.hash}`);
+    const receipt = await tx.wait();
+    console.log(`Transaction confirmed in block ${receipt?.blockNumber}`);
+  });
