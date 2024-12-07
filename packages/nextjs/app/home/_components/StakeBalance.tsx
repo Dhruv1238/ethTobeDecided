@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { parseEther } from "viem";
-import { sepolia } from "viem/chains";
+import { sepolia, baseSepolia } from "viem/chains";
 import { useAccount, useChainId, useConnect, useSwitchChain, useWriteContract } from "wagmi";
 import { injected } from "wagmi/connectors";
 
@@ -34,9 +34,9 @@ const StakeBalance: React.FC<StakeBalanceProps> = ({ initialBalance, contractAdd
       }
     }
 
-    if (currentChainId !== sepolia.id) {
+    if (currentChainId !== baseSepolia.id) {
       try {
-        await switchChain({ chainId: sepolia.id });
+        await switchChain({ chainId: baseSepolia.id });
         return;
       } catch (err) {
         console.error("Failed to switch network:", err);

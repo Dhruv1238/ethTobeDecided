@@ -14,7 +14,7 @@ const Stake: NextPage = () => {
         </h1>
         <StakeBalance
           initialBalance={0}
-          contractAddress="0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199"
+          contractAddress="0xaa27BB10f64c37FeA832D4218fE37D904e2a3911"
           contractABI={StakingABI}
           chainId={11155111}
         />
