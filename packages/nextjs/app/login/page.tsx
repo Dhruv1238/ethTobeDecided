@@ -11,8 +11,10 @@ const LoginPage = () => {
 
   const handleSignUp = () => {
     setIsLoading(true);
-    const ngrokUrl = "https://1f8b-14-195-142-82.ngrok-free.app/";
-    window.location.href = `https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=${encodeURIComponent(ngrokUrl)}/`;
+    // const ngrokUrl = "https://3bdb-14-195-142-82.ngrok-free.app/";
+    // window.location.href = `https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=${encodeURIComponent(ngrokUrl)}/`;
+    const localUrl = "http://localhost:3000";
+    window.location.href = `https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=${encodeURIComponent(localUrl)}/`;
   };
 
   return (
