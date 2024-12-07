@@ -1,35 +1,37 @@
 "use client"
 import React, { useState } from "react";
 import { attestFitnessChallenge } from "../../helpers/Attest";
+import { requestWalletConnection, useSigner } from "~~/utils/wagmi-utils";
 
 const FitnessChallenge = () => {
   const [userAddress, setUserAddress] = useState("");
   const [success, setSuccess] = useState(false);
   const [response, setResponse] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { signer, isWalletConnected } = useSigner();
   const [loading, setLoading] = useState(false);
 
   const handleAttest = async () => {
-    setLoading(true);
-    setResponse(null);
-    setError(null);
-
-    const PRIVATE_KEY = process.env.NEXT_PUBLIC_PRIVATE_KEY;
-    if (!PRIVATE_KEY) {
-      setError("Private key is not configured. Please check your .env file.");
-      setLoading(false);
-      return;
+    // Explicitly request wallet connection if not connected
+    if (!isWalletConnected) {
+      const connected = await requestWalletConnection();
+      if (!connected) {
+        setError("Failed to connect wallet");
+        return;
+      }
     }
 
+    setLoading(true);
     try {
-      const attestationId = await attestFitnessChallenge(userAddress, success, PRIVATE_KEY);
+      const attestationId = await attestFitnessChallenge(userAddress, success, signer);
       setResponse(`Attestation successful! Attestation ID: ${attestationId}`);
-    } catch (err: any) {
-      setError(err.message || "An error occurred during attestation.");
+    } catch (err : any) {
+      setError(err.message || "Attestation failed");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
