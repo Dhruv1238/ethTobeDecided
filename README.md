@@ -1,5 +1,3 @@
-Here is an effective README for the repository `Dhruv1238/ethTobeDecided`:
-
 # ethTobeDecided
 
 ## Introduction
