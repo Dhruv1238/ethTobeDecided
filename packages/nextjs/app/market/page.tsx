@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { Address } from "~~/components/scaffold-eth";
 
@@ -98,36 +99,56 @@ export default function Marketplace() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#1a1a1a]">
+      <div className="flex h-screen items-center justify-center bg-gradient-to-b from-[#1a1a1a] to-[#000001]">
         <div className="flex flex-col items-center gap-4">
           <Image src="/logo.png" alt="StakeFit Logo" width={80} height={80} className="animate-pulse" />
-          <div className="text-neon-green text-2xl">Loading Challenges...</div>
+          <div className="text-[#11ce6f] text-2xl font-bold">Loading Challenges...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen pb-20 bg-[#1a1a1a]">
+    <div className="flex flex-col min-h-screen pb-20 bg-gradient-to-b from-[#1a1a1a] to-[#000001]">
       {/* Hero Section */}
-      <div className="bg-dark-surface py-8">
+      <div className="bg-[#2d2c2e] py-8 shadow-[0_0_15px_rgba(17,206,111,0.1)]">
         <div className="max-w-6xl mx-auto text-center relative px-4">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
             onClick={() => router.back()}
-            className="absolute left-6 top-1/4 -translate-y-1/2 
-                     text-neon-green text-5xl hover:text-green-400 transition-colors"
+            className="absolute left-6 top-1/2 -translate-y-1/2 
+                     text-[#11ce6f] hover:text-[#3b82f6] transition-colors"
           >
-            ←
-          </button>
+            <ArrowLeftIcon className="w-8 h-8" />
+          </motion.button>
 
           <div className="flex flex-col items-center justify-center gap-4">
-            <Image src="/logo.png" alt="StakeFit Logo" width={60} height={60} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Image src="/logo.png" alt="StakeFit Logo" width={60} height={60} />
+            </motion.div>
             <div>
-              <h1 className="text-4xl font-bold mb-2">
-                <span className="text-2xl">Welcome to </span>
-                <span className="text-4xl font-bold text-neon-green">StakeFit</span>
-              </h1>
-              <p className="text-gray-300">Track your fitness achievements and daily challenges</p>
+              <motion.h1 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-4xl font-bold mb-2"
+              >
+                <span className="text-2xl text-[#fbf8fe]">Welcome to </span>
+                <span className="text-4xl font-bold bg-gradient-to-r from-[#11ce6f] to-[#3b82f6] text-transparent bg-clip-text">
+                  StakeFit
+                </span>
+              </motion.h1>
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="text-[#a3a2a7]"
+              >
+                Track your fitness achievements and daily challenges
+              </motion.p>
             </div>
           </div>
         </div>
@@ -143,11 +164,11 @@ export default function Marketplace() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="bg-dark-surface rounded-xl overflow-hidden border border-[#000001] hover:border-neon-green
-                         transition-all duration-200 transform hover:scale-[1.02] shadow-neon-glow"
+                className="bg-[#2d2c2e] rounded-xl overflow-hidden border border-[#11ce6f33] hover:border-[#11ce6f]
+                         transition-all duration-200 transform hover:scale-[1.02] shadow-[0_0_15px_rgba(17,206,111,0.1)]"
               >
                 {/* Challenge Image */}
-                <div className="aspect-square relative overflow-hidden bg-[#2d2c2e]">
+                <div className="aspect-square relative overflow-hidden bg-[#1a1a1a]">
                   <img
                     src={challenge.imageUrl}
                     alt={challenge.name}
@@ -163,21 +184,21 @@ export default function Marketplace() {
                   <h3 className="text-[#fbf8fe] font-bold text-xl mb-2">
                     {challenge.name} #{challenge.tokenId}
                   </h3>
-                  <p className="text-gray-400 text-sm mb-4">{challenge.description}</p>
+                  <p className="text-[#a3a2a7] text-sm mb-4">{challenge.description}</p>
 
                   {/* Owner & Date */}
                   <div className="flex flex-col gap-2 mb-4">
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-400 text-sm">Completed by:</span>
+                      <span className="text-[#a3a2a7] text-sm">Completed by:</span>
                       <Address address={challenge.owner} format="short" />
                     </div>
-                    <div className="text-gray-400 text-sm">Completed on: {challenge.timestamp}</div>
+                    <div className="text-[#a3a2a7] text-sm">Completed on: {challenge.timestamp}</div>
                   </div>
 
                   {/* Achievement Badge */}
-                  <div className="bg-[#000001] rounded-lg p-2 text-sm">
-                    <div className="text-gray-400">Achievement</div>
-                    <div className="text-neon-green font-medium">Daily Fitness Challenge Completed</div>
+                  <div className="bg-[#1a1a1a] rounded-lg p-2 text-sm border border-[#11ce6f33]">
+                    <div className="text-[#a3a2a7]">Achievement</div>
+                    <div className="text-[#11ce6f] font-medium">Daily Fitness Challenge Completed</div>
                   </div>
                 </div>
               </motion.div>
@@ -187,24 +208,36 @@ export default function Marketplace() {
       </div>
 
       {/* Stats Section */}
-      <div className="bg-dark-surface py-6 mb-16">
+      <div className="bg-[#2d2c2e] py-6 mb-16 shadow-[0_0_15px_rgba(17,206,111,0.1)]">
         <div className="max-w-2xl mx-auto grid grid-cols-3 gap-4 text-center">
-          <div>
-            <h3 className="text-2xl font-bold text-neon-green glow-text">{challenges.length}</h3>
-            <p className="text-gray-300">Total Challenges</p>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-neon-green glow-text">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h3 className="text-2xl font-bold text-[#11ce6f]">{challenges.length}</h3>
+            <p className="text-[#a3a2a7]">Total Challenges</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <h3 className="text-2xl font-bold text-[#11ce6f]">
               {new Set(challenges.map(c => c.owner)).size}
             </h3>
-            <p className="text-gray-300">Unique Athletes</p>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-neon-green glow-text">
+            <p className="text-[#a3a2a7]">Unique Athletes</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <h3 className="text-2xl font-bold text-[#11ce6f]">
               {challenges.length > 0 ? "Active" : "Completed"}
             </h3>
-            <p className="text-gray-300">Challenge Status</p>
-          </div>
+            <p className="text-[#a3a2a7]">Challenge Status</p>
+          </motion.div>
         </div>
       </div>
     </div>

@@ -33,19 +33,17 @@ export const NewHeader = () => {
             console.error("Failed to switch network:", err);
         }
     };
-
     return (
-        <div className="header-container p-3 flex justify-between items-center">
+        <div className="header-container p-3 flex justify-between items-center relative z-[100]"> {/* Increased z-index */}
             {/* Left side - Logo */}
             <div className="flex items-center gap-2">
                 <Image
-                    src="/logo-alt.png"
+                    src="/logo.png"
                     alt="Stake Fit Logo"
-                    width={32}
-                    height={32}
+                    width={70}
+                    height={70}
                     className="rounded-full"
                 />
-                {/* Removed the Momentum text */}
             </div>
 
             {/* Right side - Wallet Connection with Network Selection */}
@@ -71,35 +69,38 @@ export const NewHeader = () => {
                     </button>
 
                     {isWalletMenuOpen && (
-                        <div className="absolute right-0 mt-2 w-56 bg-[#2d2c2e] rounded-lg shadow-xl z-50">
-                            {/* Network Selection */}
-                            <div className="p-2 border-b border-[#3d3c3e]">
-                                <div className="text-sm text-[#a3a2a7] mb-2 px-2">Switch Network</div>
-                                {networks.map(network => (
-                                    <button
-                                        key={network.id}
-                                        className={`w-full px-4 py-2 text-left hover:bg-[#3d3c3e] flex items-center gap-2 rounded-lg
-                    ${currentChainId === network.id ? "bg-[#3d3c3e]" : ""}`}
-                                        onClick={() => handleNetworkSwitch(network.id)}
-                                    >
-                                        <span>{network.icon}</span>
-                                        <span className="text-white">{network.name}</span>
-                                    </button>
-                                ))}
-                            </div>
+                        <div className="fixed inset-0 z-[150]"> {/* Full-screen overlay to handle clicks */}
+                            <div className="absolute inset-0" onClick={() => setIsWalletMenuOpen(false)}></div>
+                            <div className="absolute right-3 mt-2 w-56 bg-[#2d2c2e] rounded-lg shadow-xl">
+                                {/* Network Selection */}
+                                <div className="p-2 border-b border-[#3d3c3e]">
+                                    <div className="text-sm text-[#a3a2a7] mb-2 px-2">Switch Network</div>
+                                    {networks.map(network => (
+                                        <button
+                                            key={network.id}
+                                            className={`w-full px-4 py-2 text-left hover:bg-[#3d3c3e] flex items-center gap-2 rounded-lg
+                                                    ${currentChainId === network.id ? "bg-[#3d3c3e]" : ""}`}
+                                            onClick={() => handleNetworkSwitch(network.id)}
+                                        >
+                                            <span>{network.icon}</span>
+                                            <span className="text-white">{network.name}</span>
+                                        </button>
+                                    ))}
+                                </div>
 
-                            {/* Wallet Actions */}
-                            <div className="p-2">
-                                <button
-                                    className="w-full px-4 py-2 text-left hover:bg-[#3d3c3e] text-white rounded-lg flex items-center gap-2"
-                                    onClick={() => {
-                                        disconnect();
-                                        setIsWalletMenuOpen(false);
-                                    }}
-                                >
-                                    <span>🔌</span>
-                                    <span>Disconnect</span>
-                                </button>
+                                {/* Wallet Actions */}
+                                <div className="p-2">
+                                    <button
+                                        className="w-full px-4 py-2 text-left hover:bg-[#3d3c3e] text-white rounded-lg flex items-center gap-2"
+                                        onClick={() => {
+                                            disconnect();
+                                            setIsWalletMenuOpen(false);
+                                        }}
+                                    >
+                                        <span>🔌</span>
+                                        <span>Disconnect</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
