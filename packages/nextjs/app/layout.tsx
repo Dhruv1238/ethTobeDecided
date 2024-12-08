@@ -11,6 +11,12 @@ import { FitnessProvider, useFitness } from "~~/context/FitnessContext";
 import "~~/styles/globals.css";
 import { useAuth, AuthProvider } from "~~/context/AuthContext";
 import { useRouter } from "next/navigation";
+// import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import { RainbowKitProviders } from './providers';
+import { config } from '~~/utils/rainbowConfig';
+import "@rainbow-me/rainbowkit/styles.css";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
 
 const TokenHandler = ({ children }: { children: React.ReactNode }) => {
   const { setTokens, accessToken } = useAuth();
@@ -93,15 +99,17 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
       <body>
         <ThemeProvider enableSystem>
           <AuthProvider>
-            <ScaffoldEthAppWithProviders>
-              <ApolloProvider>
-                <FitnessProvider>
-                  <AuthGuard>
-                    <TokenHandler>{children}</TokenHandler>
-                  </AuthGuard>
-                </FitnessProvider>
-              </ApolloProvider>
-            </ScaffoldEthAppWithProviders>
+            {/* <RainbowKitProviders> */}
+              <ScaffoldEthAppWithProviders>
+                <ApolloProvider>
+                  <FitnessProvider>
+                    <AuthGuard>
+                      <TokenHandler>{children}</TokenHandler>
+                    </AuthGuard>
+                  </FitnessProvider>
+                </ApolloProvider>
+              </ScaffoldEthAppWithProviders>
+            {/* </RainbowKitProviders> */}
           </AuthProvider>
         </ThemeProvider>
       </body>

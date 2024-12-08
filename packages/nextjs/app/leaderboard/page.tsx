@@ -223,7 +223,7 @@ export default function Leaderboard() {
           <motion.button
             whileHover={{ scale: 1.1 }}
             onClick={() => router.back()}
-            className="absolute left-6 top-1/2 -translate-y-1/2 
+            className="absolute left-6 top-1/4 -translate-y-1/2 
                      text-[#11ce6f] hover:text-[#3b82f6] transition-colors"
           >
             <ArrowLeftIcon className="w-8 h-8" />

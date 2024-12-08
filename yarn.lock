@@ -4296,6 +4296,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rainbow-me/rainbowkit@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@rainbow-me/rainbowkit@npm:2.2.1"
+  dependencies:
+    "@vanilla-extract/css": 1.15.5
+    "@vanilla-extract/dynamic": 2.1.2
+    "@vanilla-extract/sprinkles": 1.6.3
+    clsx: 2.1.1
+    qrcode: 1.5.4
+    react-remove-scroll: 2.6.0
+    ua-parser-js: ^1.0.37
+  peerDependencies:
+    "@tanstack/react-query": ">=5.0.0"
+    react: ">=18"
+    react-dom: ">=18"
+    viem: 2.x
+    wagmi: ^2.9.0
+  checksum: 0647344590fe2970b2d0446b08a4b4d29af015992df0e8da47c17388fd7e8d1334d3a7aae4e574306950bb0ce51faef11d8713ed557e04d8bd92627938d91915
+  languageName: node
+  linkType: hard
+
 "@repeaterjs/repeater@npm:^3.0.4, @repeaterjs/repeater@npm:^3.0.6":
   version: 3.0.6
   resolution: "@repeaterjs/repeater@npm:3.0.6"
@@ -4870,6 +4891,24 @@ __metadata:
   version: 5.59.20
   resolution: "@tanstack/query-core@npm:5.59.20"
   checksum: ed836033c7f34a61e7f152da1067ec170e36e861dc591e2a068f73918bcc641bb50ce90dc3b8d12e047f63f70b2842f72e3328d649c841f5c4ea51fdb95e454b
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-core@npm:5.62.3":
+  version: 5.62.3
+  resolution: "@tanstack/query-core@npm:5.62.3"
+  checksum: 6105d00fb6d6a5ffcec86f7781990d805d9d50092f52ae2fa92a0fdbecd55cac757059a1f38cd107c0abbe9a2bd0ce3b8f2ce354fecb1b73a014dea374990305
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.62.3":
+  version: 5.62.3
+  resolution: "@tanstack/react-query@npm:5.62.3"
+  dependencies:
+    "@tanstack/query-core": 5.62.3
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: dc7ead76788924193bdd791c3a6fe0b85aff51252a1067b87f6a78ebab08d09476c5941773a970afb3700f79077406ce5de81fb7fb6a1131581afe0d92626601
   languageName: node
   linkType: hard
 
@@ -17541,6 +17580,8 @@ __metadata:
     "@apollo/experimental-nextjs-app-support": ^0.11.7
     "@ethereum-attestation-service/eas-sdk": ^2.7.0
     "@graphprotocol/graph-cli": ^0.91.1
+    "@rainbow-me/rainbowkit": ^2.2.1
+    "@tanstack/react-query": ^5.62.3
     "@types/ethereum-blockies": ^0
     axios: ^1.7.9
     ethereum-blockies: ^0.1.1

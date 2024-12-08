@@ -11,7 +11,8 @@ const LoginPage = () => {
 
   const handleSignUp = () => {
     setIsLoading(true);
-    const localUrl = "http://localhost:3000";
+    // const localUrl = "http://localhost:3000";
+    const localUrl = "https://17ca-14-195-142-82.ngrok-free.app"
     window.location.href = `https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=${encodeURIComponent(localUrl)}/`;
   };
 

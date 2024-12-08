@@ -1,14 +1,20 @@
 import { FC, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { MagnifyingGlassIcon, PaperAirplaneIcon, TrophyIcon, XMarkIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
+import { 
+  SparklesIcon, 
+  PaperAirplaneIcon, 
+  TrophyIcon, 
+  XMarkIcon, 
+  VideoCameraIcon,
+  GiftIcon 
+} from "@heroicons/react/24/outline";
 import { useAccount } from "wagmi";
-
-
 
 interface Message {
   text: string;
   isUser: boolean;
   blockchainInsights?: any;
+  isNFTMinted?: boolean;
 }
 
 const ChatSearchBar: FC = () => {
@@ -17,17 +23,16 @@ const ChatSearchBar: FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showCTA, setShowCTA] = useState(false);
+  const [showNFTButton, setShowNFTButton] = useState(false);
 
   const { address } = useAccount();
-
   const stepCount = 2000;
 
-
   useEffect(() => {
-    // Show CTA after 2 seconds
     const timer = setTimeout(() => setShowCTA(true), 2000);
     return () => clearTimeout(timer);
   }, []);
+
   const dailyChallenges = `Today's Challenges 🏋️‍♂️:\n
 1. 10 Push-ups\n
 2. 20 Sit-ups\n
@@ -47,6 +52,12 @@ Just Upload your video to participate`;
       },
     ]);
   };
+
+  const handleViewNFT = () => {
+    // Replace with your NFT marketplace URL
+    window.open('https://your-nft-marketplace.com', '_blank');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     setInputText("");
     e.preventDefault();
@@ -56,27 +67,34 @@ Just Upload your video to participate`;
     setMessages(prev => [...prev, { text: inputText, isUser: true }]);
 
     try {
-      // Update inputText with appended information
-      setInputText(`${inputText}(my address=${address} my steps=${stepCount} USE ONLY IF RELEVENT)`);
+      const enhancedInput = `${inputText}(my address=${address} my steps=${stepCount} USE ONLY IF RELEVENT)`;
       const response = await fetch("http://ai.thearnab.tech:8000/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: inputText }),
+        body: JSON.stringify({ message: enhancedInput }),
       });
 
       if (!response.ok) throw new Error("Network response was not ok");
 
       const data = await response.json();
+      const isNFTMinted = data.response.includes("NFT minted successfully");
+
       setMessages(prev => [
         ...prev,
         {
           text: data.response,
           isUser: false,
           blockchainInsights: data.blockchain_insights,
+          isNFTMinted
         },
       ]);
+
+      if (isNFTMinted) {
+        setShowNFTButton(true);
+      }
+
     } catch (error) {
       setMessages(prev => [...prev, { text: "Sorry, there was an error processing your request.", isUser: false }]);
     } finally {
@@ -94,8 +112,9 @@ Just Upload your video to participate`;
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('WalletAddress', address);
+      formData.append('WalletAddress', address || '');
       formData.append('description', "Pushups rush!!");
+      
       const imageUrls = [
         'https://walrus-ms.onrender.com/retrieve/PAnhlbndMMhGpbGYbJn24mbllXwYKXNzICe5oWACaYQ',
         'https://walrus-ms.onrender.com/retrieve/KQ7VGN23gif1in3I0wVETV6tiqtwBmLF1vla8GNauH8',
@@ -114,8 +133,6 @@ Just Upload your video to participate`;
         if (!response.ok) {
           throw new Error('File upload failed');
         }
-
-        // Handle successful upload
         console.log('File uploaded successfully');
       } catch (error) {
         console.error('Error uploading file:', error);
@@ -127,7 +144,6 @@ Just Upload your video to participate`;
 
   return (
     <>
-      {/* Pointing Arrow CTA */}
       <AnimatePresence mode="wait">
         {showCTA && !isChat && (
           <motion.div
@@ -154,11 +170,8 @@ Just Upload your video to participate`;
               }}
               className="relative"
             >
-              {/* Glow effect */}
               <div className="absolute inset-0 bg-[#11ce6f] rounded-xl blur-lg opacity-30"></div>
-
               <div className="relative bg-gradient-to-r from-[#000001] to-[#1a1a1a] p-3 rounded-xl border border-[#11ce6f]">
-                {/* Close button */}
                 <button
                   onClick={() => setShowCTA(false)}
                   className="absolute -top-2 -right-2 p-1 rounded-full bg-[#1a1a1a] border border-[#11ce6f]
@@ -166,9 +179,7 @@ Just Upload your video to participate`;
                 >
                   <XMarkIcon className="w-4 h-4 text-[#11ce6f]" />
                 </button>
-
                 <p className="text-[#11ce6f] text-sm font-bold whitespace-nowrap">Daily Challenge is here! 💪</p>
-                {/* Arrow pointing down */}
                 <div className="absolute bottom-[-20px] left-4 transform -translate-x-1/2">
                   <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-[#11ce6f]"></div>
                 </div>
@@ -177,11 +188,8 @@ Just Upload your video to participate`;
           </motion.div>
         )}
       </AnimatePresence>
-      <div
-        className={`fixed bottom-0 left-0 right-0 transition-all duration-300 ease-in-out ${isChat ? "h-[90vh]" : "h-16"
-          } bg-[#2d2c2e]`}
-      >
-        {/* Header when in chat mode */}
+
+      <div className={`fixed bottom-0 left-0 right-0 transition-all duration-300 ease-in-out ${isChat ? "h-[90vh]" : "h-16"} bg-[#2d2c2e]`}>
         {isChat && (
           <div className="flex items-center justify-between p-4 border-b border-[#000001]">
             <h2 className="text-[#fbf8fe] font-medium">Chat Assistant</h2>
@@ -191,15 +199,20 @@ Just Upload your video to participate`;
           </div>
         )}
 
-        {/* Chat Messages */}
         <div className={`${isChat ? "flex" : "hidden"} flex-col h-[calc(90vh-128px)] overflow-y-auto p-4 gap-4`}>
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}>
-              <div
-                className={`max-w-[70%] rounded-xl p-3 ${message.isUser ? "bg-[#11ce6f] text-[#fbf8fe]" : "bg-[#000001] text-[#fbf8fe]"
-                  }`}
-              >
+              <div className={`max-w-[70%] rounded-xl p-3 ${message.isUser ? "bg-[#11ce6f] text-[#fbf8fe]" : "bg-[#000001] text-[#fbf8fe]"}`}>
                 {message.text}
+                {message.isNFTMinted && (
+                  <button
+                    onClick={handleViewNFT}
+                    className="mt-2 flex items-center gap-2 px-3 py-1.5 bg-[#11ce6f] rounded-lg hover:bg-opacity-90 transition-all"
+                  >
+                    <GiftIcon className="w-4 h-4" />
+                    <span>View NFT</span>
+                  </button>
+                )}
                 {message.blockchainInsights && (
                   <div className="mt-2 text-sm text-gray-400">
                     <p>Blockchain Insights:</p>
@@ -211,10 +224,8 @@ Just Upload your video to participate`;
           ))}
         </div>
 
-        {/* Input Bar */}
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-[#2d2c2e] border-t border-[#000001]">
           <form onSubmit={handleSubmit} className="flex items-center gap-4">
-            {/* Daily Challenges Button */}
             <button
               type="button"
               onClick={handleDailyChallenges}
@@ -223,14 +234,13 @@ Just Upload your video to participate`;
                        shadow-md hover:shadow-lg"
             >
               <TrophyIcon className="w-5 h-5 text-[#11ce6f]" />
-              {/* Subtle highlight on hover */}
               <div className="absolute inset-0 bg-[#11ce6f] rounded-xl opacity-0 group-hover:opacity-5 transition-opacity"></div>
             </button>
 
             <div className="relative flex-1">
               <input
                 type="text"
-                placeholder={isChat ? "Type a message..." : "Search..."}
+                placeholder={isChat ? "Type a message..." : "Start onChain interaction.."}
                 value={inputText}
                 onChange={e => setInputText(e.target.value)}
                 onFocus={() => setIsChat(true)}
@@ -239,11 +249,12 @@ Just Upload your video to participate`;
                 disabled={isLoading}
               />
               {!isChat && (
-                <MagnifyingGlassIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#a3a2a7]" />
+                <SparklesIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#a3a2a7]" />
               )}
             </div>
+
             {isChat && (
-              <div className="flex items-center space-x-2 max-w-screen">
+              <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={handleVideoUploadClick}

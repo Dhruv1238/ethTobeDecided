@@ -39,6 +39,7 @@ const Home: NextPage = () => {
     } else {
       y.set(0);
     }
+    setIsDragging(false);
   };
 
   return (
@@ -60,15 +61,16 @@ const Home: NextPage = () => {
 
       {/* Scrollable Container */}
       <div className="min-h-screen overflow-y-auto bg-gradient-to-b from-[#1a1a1a] to-[#000001]">
-        {/* Main Content */}
+        {/* Draggable Header Section */}
         <motion.div
           drag="y"
           dragConstraints={{ top: 0, bottom: 0 }}
-          dragElastic={0.9}
+          dragElastic={0.1}
+          dragMomentum={false}
           onDrag={handleDrag}
           onDragEnd={handleDragEnd}
           style={{ y }}
-          className="flex items-center flex-col pt-10 pb-32" // Increased bottom padding
+          className="w-full"
         >
           {/* Pull Down Indicator */}
           <motion.div
@@ -103,117 +105,117 @@ const Home: NextPage = () => {
             </motion.span>
           </motion.div>
 
-          {/* Content Container */}
-          <div className="px-5 max-w-4xl w-full relative z-10">
-            {/* Logo and Title */}
+          {/* Logo and Title Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12 pt-16"
+          >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center mb-12 pt-16"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              className="relative inline-block"
             >
+              <Image
+                src="/logo.png"
+                alt="StakeFit Logo"
+                width={120}
+                height={120}
+                className="mx-auto mb-4 drop-shadow-[0_0_15px_rgba(17,206,111,0.2)]"
+              />
               <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200 }}
-                className="relative inline-block"
-              >
-                <Image
-                  src="/logo.png"
-                  alt="StakeFit Logo"
-                  width={120}
-                  height={120}
-                  className="mx-auto mb-4 drop-shadow-[0_0_15px_rgba(17,206,111,0.2)]"
-                />
-                <motion.div
-                  animate={{ opacity: [0, 1, 0] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-[#11ce6f20] to-transparent"
-                />
-              </motion.div>
-              <h1 className="text-center mb-4">
-                <span className="block text-4xl font-bold mb-2 bg-gradient-to-r from-[#11ce6f] to-[#3b82f6] text-transparent bg-clip-text">
-                  Welcome to StakeFit
-                </span>
-                <span className="text-xl text-[#a3a2a7]">
-                  A Bet on your Fitness
-                </span>
-              </h1>
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "reverse"
+                }}
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-[#11ce6f20] to-transparent"
+              />
             </motion.div>
+            <h1 className="text-center mb-4">
+              <span className="block text-4xl font-bold mb-2 bg-gradient-to-r from-[#11ce6f] to-[#3b82f6] text-transparent bg-clip-text">
+                Welcome to StakeFit
+              </span>
+              <span className="text-xl text-[#a3a2a7]">
+                A Bet on your Fitness
+              </span>
+            </h1>
+          </motion.div>
+        </motion.div>
 
-            {/* Stats Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="space-y-4 mb-8"
-            >
-              <StatsComponent stepsGoal={8000} />
-              <StepComponent totalSteps={8000} />
-            </motion.div>
+        {/* Regular Scrollable Content */}
+        <div className="px-5 max-w-4xl w-full mx-auto relative z-10">
+          {/* Stats Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="space-y-4 mb-8"
+          >
+            <StatsComponent stepsGoal={8000} />
+            <StepComponent totalSteps={8000} />
+          </motion.div>
 
-            {/* Stake Card Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="relative mb-8"
-            >
-              <div className="backdrop-blur-lg bg-opacity-80">
-                <StakeCard contractAddress={contractAddress} contractABI={contractABI} />
-              </div>
-            </motion.div>
+          {/* Stake Card Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="relative mb-8"
+          >
+            <div className="backdrop-blur-lg bg-opacity-80">
+              <StakeCard contractAddress={contractAddress} contractABI={contractABI} />
+            </div>
+          </motion.div>
 
-            {/* Connected Address */}
-            {connectedAddress && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="flex justify-center items-center gap-2 mb-8 bg-[#2d2c2e] px-6 py-3 rounded-full
-                           shadow-[0_0_15px_rgba(17,206,111,0.1)] border border-[#11ce6f33]"
-              >
-                <span className="text-[#a3a2a7]">Connected:</span>
-                <Address address={connectedAddress} />
-              </motion.div>
-            )}
-
-            {/* Additional Content Section */}
+          {/* Connected Address */}
+          {connectedAddress && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="mt-12 space-y-8 mb-24" // Added bottom margin
+              transition={{ delay: 0.4 }}
+              className="flex justify-center items-center gap-2 mb-8 bg-[#2d2c2e] px-6 py-3 rounded-full
+                         shadow-[0_0_15px_rgba(17,206,111,0.1)] border border-[#11ce6f33]"
             >
-              {/* How It Works */}
-              <div className="bg-[#2d2c2e] rounded-xl p-6 border border-[#11ce6f33]">
-                <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#11ce6f] to-[#3b82f6] text-transparent bg-clip-text">
-                  How StakeFit Works
-                </h2>
-                <div className="space-y-4 text-[#a3a2a7]">
-                  <p>1. Connect your wallet and stake ETH</p>
-                  <p>2. Complete your daily step goals</p>
-                  <p>3. Earn rewards for staying active</p>
-                </div>
-              </div>
-
-              {/* Tips Section */}
-              <div className="bg-[#2d2c2e] rounded-xl p-6 border border-[#11ce6f33]">
-                <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#11ce6f] to-[#3b82f6] text-transparent bg-clip-text">
-                  Fitness Tips
-                </h2>
-                <div className="space-y-4 text-[#a3a2a7]">
-                  <p>• Stay consistent with your daily steps</p>
-                  <p>• Set achievable goals</p>
-                  <p>• Track your progress regularly</p>
-                </div>
-              </div>
+              <span className="text-[#a3a2a7]">Connected:</span>
+              <Address address={connectedAddress} />
             </motion.div>
-          </div>
-        </motion.div>
+          )}
+
+          {/* Additional Content Section */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-12 space-y-8 mb-24"
+          >
+            {/* How It Works */}
+            <div className="bg-[#2d2c2e] rounded-xl p-6 border border-[#11ce6f33]">
+              <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#11ce6f] to-[#3b82f6] text-transparent bg-clip-text">
+                How StakeFit Works
+              </h2>
+              <div className="space-y-4 text-[#a3a2a7]">
+                <p>1. Connect your wallet and stake ETH</p>
+                <p>2. Complete your daily step goals</p>
+                <p>3. Earn rewards for staying active</p>
+              </div>
+            </div>
+
+            {/* Tips Section */}
+            <div className="bg-[#2d2c2e] rounded-xl p-6 border border-[#11ce6f33]">
+              <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#11ce6f] to-[#3b82f6] text-transparent bg-clip-text">
+                Fitness Tips
+              </h2>
+              <div className="space-y-4 text-[#a3a2a7]">
+                <p>• Stay consistent with your daily steps</p>
+                <p>• Set achievable goals</p>
+                <p>• Track your progress regularly</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* ChatSearchBar - Fixed on top */}
