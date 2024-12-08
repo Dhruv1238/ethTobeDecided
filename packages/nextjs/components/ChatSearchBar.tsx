@@ -1,24 +1,31 @@
-import { FC, useState, useEffect } from "react";
-import { MagnifyingGlassIcon, PaperAirplaneIcon, XMarkIcon, TrophyIcon } from "@heroicons/react/24/outline";
-import { motion, AnimatePresence } from "framer-motion";
+import { FC, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { MagnifyingGlassIcon, PaperAirplaneIcon, TrophyIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useAccount } from "wagmi";
+import { useFitness } from "~~/context/FitnessContext";
+
+
 
 interface Message {
   text: string;
   isUser: boolean;
+  blockchainInsights?: any;
 }
 
 const ChatSearchBar: FC = () => {
   const [isChat, setIsChat] = useState(false);
   const [inputText, setInputText] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [showCTA, setShowCTA] = useState(false);
+
+  const { address } = useAccount();
 
   useEffect(() => {
     // Show CTA after 2 seconds
     const timer = setTimeout(() => setShowCTA(true), 2000);
     return () => clearTimeout(timer);
   }, []);
-
   const dailyChallenges = `Today's Challenges 🏋️‍♂️:
 1. 10 Push-ups
 2. 20 Sit-ups
@@ -39,32 +46,40 @@ Reply 'done' when you've completed the challenge.`;
       },
     ]);
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    setInputText("");
     e.preventDefault();
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || isLoading) return;
 
+    setIsLoading(true);
     setMessages(prev => [...prev, { text: inputText, isUser: true }]);
 
-    // Bot response logic
-    setTimeout(() => {
-      let botResponse = "This is a sample response from the bot.";
+    try {
+      const response = await fetch("http://localhost:3000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: inputText }),
+      });
 
-      // Check if user completed challenge
-      if (inputText.toLowerCase() === "done") {
-        botResponse = "Congratulations! 🎉 You've completed today's challenge. Your reward of 0.01 ETH will be processed shortly.";
-      }
+      if (!response.ok) throw new Error("Network response was not ok");
 
+      const data = await response.json();
       setMessages(prev => [
         ...prev,
         {
-          text: botResponse,
+          text: data.response,
           isUser: false,
+          blockchainInsights: data.blockchain_insights,
         },
       ]);
-    }, 1000);
-
-    setInputText("");
+    } catch (error) {
+      setMessages(prev => [...prev, { text: "Sorry, there was an error processing your request.", isUser: false }]);
+    } finally {
+      setIsLoading(false);
+      setInputText("");
+    }
   };
 
   return (
@@ -81,8 +96,8 @@ Reply 'done' when you've completed the challenge.`;
               y: 10,
               transition: {
                 duration: 0.2,
-                ease: "easeOut"
-              }
+                ease: "easeOut",
+              },
             }}
             className="fixed bottom-24 left-4 z-50"
           >
@@ -109,9 +124,7 @@ Reply 'done' when you've completed the challenge.`;
                   <XMarkIcon className="w-4 h-4 text-[#11ce6f]" />
                 </button>
 
-                <p className="text-[#11ce6f] text-sm font-bold whitespace-nowrap">
-                  Daily Challenge is here! 💪
-                </p>
+                <p className="text-[#11ce6f] text-sm font-bold whitespace-nowrap">Daily Challenge is here! 💪</p>
                 {/* Arrow pointing down */}
                 <div className="absolute bottom-[-20px] left-4 transform -translate-x-1/2">
                   <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-[#11ce6f]"></div>
@@ -121,13 +134,12 @@ Reply 'done' when you've completed the challenge.`;
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Chat Interface */}
       <div
-        className={`fixed bottom-0 left-0 right-0 transition-all duration-300 ease-in-out
-        ${isChat ? "h-[90vh]" : "h-16"} bg-[#2d2c2e]`}
+        className={`fixed bottom-0 left-0 right-0 transition-all duration-300 ease-in-out ${
+          isChat ? "h-[90vh]" : "h-16"
+        } bg-[#2d2c2e]`}
       >
-        {/* Chat Header */}
+        {/* Header when in chat mode */}
         {isChat && (
           <div className="flex items-center justify-between p-4 border-b border-[#000001]">
             <h2 className="text-[#fbf8fe] font-medium">Chat Assistant</h2>
@@ -142,12 +154,17 @@ Reply 'done' when you've completed the challenge.`;
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}>
               <div
-                className={`max-w-[70%] rounded-xl p-3 
-                ${message.isUser ? "bg-[#11ce6f] text-[#fbf8fe]" : "bg-[#000001] text-[#fbf8fe]"}`}
+                className={`max-w-[70%] rounded-xl p-3 ${
+                  message.isUser ? "bg-[#11ce6f] text-[#fbf8fe]" : "bg-[#000001] text-[#fbf8fe]"
+                }`}
               >
-                {message.text.split('\n').map((line, i) => (
-                  <div key={i}>{line}</div>
-                ))}
+                {message.text}
+                {message.blockchainInsights && (
+                  <div className="mt-2 text-sm text-gray-400">
+                    <p>Blockchain Insights:</p>
+                    <pre>{JSON.stringify(message.blockchainInsights, null, 2)}</pre>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -177,7 +194,8 @@ Reply 'done' when you've completed the challenge.`;
                 onChange={e => setInputText(e.target.value)}
                 onFocus={() => setIsChat(true)}
                 className="w-full px-4 py-2 rounded-xl bg-[#000001] text-[#fbf8fe] 
-                  placeholder-[#a3a2a7] focus:outline-none focus:ring-2 focus:ring-[#11ce6f]"
+                placeholder-[#a3a2a7] focus:outline-none focus:ring-2 focus:ring-[#11ce6f]"
+                disabled={isLoading}
               />
               {!isChat && (
                 <MagnifyingGlassIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#a3a2a7]" />
@@ -187,8 +205,9 @@ Reply 'done' when you've completed the challenge.`;
               <button
                 type="submit"
                 className="p-2 rounded-xl bg-[#11ce6f] text-[#fbf8fe] hover:opacity-90 transition-opacity"
+                disabled={isLoading}
               >
-                <PaperAirplaneIcon className="w-5 h-5" />
+                {isLoading ? <span className="animate-spin">⌛</span> : <PaperAirplaneIcon className="w-5 h-5" />}
               </button>
             )}
           </form>
