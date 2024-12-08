@@ -39,8 +39,8 @@ export const NewHeader = () => {
             {/* Left side - Logo */}
             <div className="flex items-center gap-2">
                 <Image
-                    src="/logo.png"
-                    alt="Momentum Logo"
+                    src="/logo-alt.png"
+                    alt="Stake Fit Logo"
                     width={32}
                     height={32}
                     className="rounded-full"
