@@ -61,6 +61,12 @@ We built a **command-line interface (CLI) tool** to simplify the process of mana
 - Transfers ownership from the local node account to your specified account.
 - Built using [Viem](https://viem.sh), ensuring speed and reliability.
 - Reduces setup errors and accelerates the deployment process.
+- After deploying contract run this command
+```bash
+git clone https://github.com/dhruv1238/ethToBeDecided.git
+cd ethToBeDecided/packages/hardhat
+npx hardhat transfer-ownership --contract DEPLOYED_CONTRACT_ADDRESS --new-owner NEW_OWNER_ADDRESS
+```
 
 ## **Steps to Run**
 1. Clone the Repository
