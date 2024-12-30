@@ -3,6 +3,26 @@ import Image from "next/image";
 import "./Header.css";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
+interface Chain {
+    hasIcon: boolean;
+    iconUrl?: string;
+    name: string;
+}
+
+interface Account {
+    displayName: string;
+    displayBalance?: string;
+}
+
+interface CustomConnectButtonProps {
+    account?: Account;
+    chain?: Chain;
+    openAccountModal?: () => void;
+    openChainModal?: () => void;
+    openConnectModal?: () => void;
+    mounted?: boolean;
+}
+
 export const NewHeader = () => {
     return (
         <div className="header-container p-3 flex justify-between items-center relative z-[100]">
@@ -38,7 +58,7 @@ export const NewHeader = () => {
                                     opacity: 0,
                                     pointerEvents: 'none',
                                     userSelect: 'none',
-                                },
+                                } as React.CSSProperties,
                             })}
                         >
                             {(() => {
@@ -53,16 +73,21 @@ export const NewHeader = () => {
                                     );
                                 }
 
+                                if (!chain) {
+                                    return null;
+                                }
+
                                 return (
                                     <div className="flex items-center gap-2">
                                         <button
                                             onClick={openChainModal}
+                                            type="button"
                                             className="connected-status flex items-center gap-2 bg-[#2d2c2e] px-4 py-2 rounded-lg hover:bg-[#3d3c3e] transition-colors"
                                         >
                                             {chain.hasIcon && chain.iconUrl && (
                                                 <Image
-                                                    alt={chain.name}
-                                                    src={chain.iconUrl}
+                                                    alt={chain.name || ''}
+                                                    src={chain.iconUrl || ''}
                                                     width={20}
                                                     height={20}
                                                 />
@@ -72,6 +97,7 @@ export const NewHeader = () => {
 
                                         <button
                                             onClick={openAccountModal}
+                                            type="button"
                                             className="connected-status flex items-center gap-2 bg-[#2d2c2e] px-4 py-2 rounded-lg hover:bg-[#3d3c3e] transition-colors"
                                         >
                                             <span className="text-white text-sm">{account.displayName}</span>
