@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleSignUp = () => {
     setIsLoading(true);
     // const localUrl = "http://localhost:3000";
-    const localUrl = "https://08de-14-195-142-82.ngrok-free.app"
+    const localUrl = "https://62a2-14-195-142-82.ngrok-free.app"
     window.location.href = `https://small-mouse-2759.arnabbhowmik019.workers.dev/google/auth?redirect_url=${encodeURIComponent(localUrl)}/`;
   };
 

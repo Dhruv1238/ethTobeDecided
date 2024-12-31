@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import "./Header.css";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useRouter } from "next/navigation";
 
 interface Chain {
     hasIcon: boolean;
@@ -24,6 +25,13 @@ interface CustomConnectButtonProps {
 }
 
 export const NewHeader = () => {
+
+    const router = useRouter();
+
+    const handleLogoClick = () => {
+        router.push("/market");
+    };
+
     return (
         <div className="header-container p-3 flex justify-between items-center relative z-[100]">
             {/* Left side - Logo */}
@@ -34,6 +42,7 @@ export const NewHeader = () => {
                     width={70}
                     height={70}
                     className="rounded-full"
+                    onClick={()=>handleLogoClick}
                 />
             </div>
 
