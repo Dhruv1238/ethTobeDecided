@@ -1,4 +1,4 @@
-
+demo video link :https://youtu.be/OcKEgasiIgk
 # StakeFit: Fitness Meets Accountability on Web3 🚀💪
 
 **StakeFit** is your ultimate companion for building strong fitness habits. It’s not just an app—it’s a commitment. By staking money on your fitness goals, StakeFit helps you stay accountable and consistent, while ensuring full transparency through blockchain technology. Whether you're crushing daily fitness challenges or tracking your progress, StakeFit keeps you motivated, on track, and rewarded.
